@@ -14,23 +14,34 @@
 สนามเด็กเล่นสร้างปัญญา
 </title>
 
+
 <script
   defer
   src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js">
 </script>
+
+<script
+  defer
+  src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js">
+</script>
+
+<script
+  defer
+  src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+</script>
+
 
 <style>
 
 :root{
   --pink:#ed0a68;
   --purple:#70268b;
-  --green:#29ae98;
-  --blue:#149cd3;
-  --orange:#ff813b;
+  --green:#25ad91;
+  --orange:#ff843b;
   --bg:#fff7fa;
-  --text:#332f33;
-  --muted:#817a81;
-  --shadow:0 12px 35px rgba(122,27,79,.11);
+  --text:#332e33;
+  --muted:#837982;
+  --shadow:0 12px 35px rgba(120,25,80,.11);
 }
 
 *{
@@ -39,9 +50,12 @@
 
 body{
   margin:0;
-  font-family:Tahoma,Arial,sans-serif;
-  background:var(--bg);
+  font-family:
+    Tahoma,
+    Arial,
+    sans-serif;
   color:var(--text);
+  background:var(--bg);
 }
 
 button,
@@ -52,9 +66,14 @@ textarea{
 }
 
 .layout{
-  min-height:100vh;
   display:flex;
+  min-height:100vh;
 }
+
+
+/* ===============================
+   SIDEBAR
+================================ */
 
 .sidebar{
   position:fixed;
@@ -63,41 +82,46 @@ textarea{
   bottom:0;
   width:235px;
   padding:16px 13px;
-  color:white;
+  z-index:30;
+  color:#fff;
+
   background:
     linear-gradient(
       180deg,
       #ed0867,
-      #c11779 45%,
-      #65247f
+      #c31779 45%,
+      #64257f
     );
-  z-index:30;
 }
 
 .brand{
-  font-size:18px;
+  padding:15px 10px 23px;
   font-weight:900;
-  padding:15px 10px 22px;
+  font-size:18px;
 }
 
 .menu{
   width:100%;
-  display:block;
   border:0;
-  background:transparent;
-  color:white;
-  padding:13px;
   margin:5px 0;
+  padding:13px;
   border-radius:15px;
   text-align:left;
+  color:#fff;
+  background:transparent;
   cursor:pointer;
 }
 
 .menu:hover,
 .menu.active{
-  background:white;
   color:var(--pink);
+  background:#fff;
 }
+
+
+/* ===============================
+   MAIN
+================================ */
 
 .main{
   margin-left:235px;
@@ -115,15 +139,17 @@ textarea{
 
 .hero{
   padding:32px;
-  color:white;
   border-radius:28px;
+  color:white;
+
   background:
     linear-gradient(
       115deg,
       #ed0867,
-      #d51075,
-      #722789
+      #d51074,
+      #702789
     );
+
   box-shadow:var(--shadow);
 }
 
@@ -136,15 +162,15 @@ textarea{
   margin-top:18px;
   padding:7px 13px;
   border-radius:20px;
-  background:rgba(255,255,255,.17);
+  background:rgba(255,255,255,.18);
 }
 
 .card{
-  background:#fff;
   padding:20px;
-  border-radius:22px;
-  box-shadow:var(--shadow);
   margin-bottom:18px;
+  border-radius:22px;
+  background:#fff;
+  box-shadow:var(--shadow);
 }
 
 .grid4{
@@ -163,10 +189,22 @@ textarea{
 }
 
 .kpi{
-  margin-top:6px;
+  margin-top:5px;
   color:var(--pink);
   font-size:29px;
   font-weight:900;
+}
+
+
+/* ===============================
+   FORM
+================================ */
+
+.form-grid{
+  display:grid;
+  grid-template-columns:
+    1fr 1fr;
+  gap:14px;
 }
 
 .field label{
@@ -176,27 +214,16 @@ textarea{
   font-weight:700;
 }
 
-.form-grid{
-  display:grid;
-  grid-template-columns:
-    1fr 1fr;
-  gap:14px;
-}
-
 input,
 select,
 textarea{
+  display:block;
   width:100%;
-  padding:12px;
-  border:1px solid #e9dce3;
+  border:1px solid #eadde4;
+  padding:12px 13px;
   border-radius:13px;
-  background:white;
   outline:none;
-}
-
-textarea{
-  min-height:110px;
-  resize:vertical;
+  background:#fff;
 }
 
 input:focus,
@@ -205,16 +232,21 @@ textarea:focus{
   border-color:var(--pink);
 }
 
+textarea{
+  min-height:110px;
+  resize:vertical;
+}
+
 .btn{
   border:0;
-  border-radius:14px;
   padding:12px 18px;
+  border-radius:14px;
   cursor:pointer;
   font-weight:700;
 }
 
 .primary{
-  color:white;
+  color:#fff;
   background:
     linear-gradient(
       90deg,
@@ -223,23 +255,27 @@ textarea:focus{
     );
 }
 
-.soft{
-  color:var(--pink);
-  background:#ffe6ef;
-}
-
 .green{
-  color:white;
+  color:#fff;
   background:var(--green);
 }
 
+.soft{
+  color:var(--pink);
+  background:#ffe5ef;
+}
+
+
+/* ===============================
+   CAMERA
+================================ */
+
 .camera{
-  height:560px;
-  min-height:560px;
-  overflow:hidden;
   position:relative;
+  overflow:hidden;
+  height:560px;
   border-radius:28px;
-  background:#161116;
+  background:#171117;
 }
 
 video{
@@ -258,6 +294,8 @@ video{
   transform:translate(-50%,-50%);
   border:4px solid white;
   border-radius:48%;
+  pointer-events:none;
+
   box-shadow:
     0 0 0 9999px
     rgba(0,0,0,.18);
@@ -269,12 +307,62 @@ video{
   left:50%;
   transform:translateX(-50%);
   min-width:290px;
+  max-width:92%;
   padding:11px 18px;
-  border-radius:24px;
-  color:white;
+  border-radius:25px;
   text-align:center;
+  color:white;
   background:rgba(0,0,0,.68);
 }
+
+
+/* ===============================
+   TABLE
+================================ */
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th,
+td{
+  padding:10px;
+  border-bottom:1px solid #eee3e9;
+  text-align:left;
+  white-space:nowrap;
+}
+
+th{
+  background:#fff7fa;
+  color:#686168;
+}
+
+.badge{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:12px;
+  font-size:12px;
+}
+
+.child{
+  color:#9c5500;
+  background:#ffedd1;
+}
+
+.parent{
+  color:#076e5e;
+  background:#dff7f1;
+}
+
+
+/* ===============================
+   RANKING
+================================ */
 
 .rank-row{
   display:grid;
@@ -289,7 +377,7 @@ video{
 }
 
 .rank-row:nth-child(1){
-  background:#fff2ba;
+  background:#fff2b9;
 }
 
 .rank-row:nth-child(2){
@@ -301,51 +389,31 @@ video{
 }
 
 .rank-number{
-  text-align:center;
   color:var(--pink);
-  font-weight:900;
   font-size:20px;
+  font-weight:900;
+  text-align:center;
 }
 
-.table-wrap{
-  overflow:auto;
+
+/* ===============================
+   SURVEY
+================================ */
+
+.rating-row{
+  display:grid;
+  grid-template-columns:
+    1fr 160px;
+  gap:12px;
+  align-items:center;
+  padding:10px 0;
+  border-bottom:1px solid #f2e8ed;
 }
 
-table{
-  width:100%;
-  border-collapse:collapse;
-}
 
-th,
-td{
-  padding:11px 9px;
-  border-bottom:1px solid #f0e5ea;
-  text-align:left;
-  white-space:nowrap;
-}
-
-th{
-  background:#fff8fb;
-  color:#696169;
-  font-size:13px;
-}
-
-.badge{
-  display:inline-block;
-  padding:5px 9px;
-  border-radius:12px;
-  font-size:12px;
-}
-
-.badge-child{
-  color:#9e5300;
-  background:#ffeed3;
-}
-
-.badge-parent{
-  color:#086b5e;
-  background:#dff7f2;
-}
+/* ===============================
+   REWARD
+================================ */
 
 .reward-grid{
   display:grid;
@@ -354,14 +422,14 @@ th{
   gap:15px;
 }
 
-.reward{
+.reward-card{
   overflow:hidden;
-  background:white;
   border-radius:20px;
+  background:#fff;
   box-shadow:var(--shadow);
 }
 
-.reward img{
+.reward-card img{
   width:100%;
   height:180px;
   object-fit:cover;
@@ -371,53 +439,96 @@ th{
   padding:15px;
 }
 
-.rating-grid{
-  display:grid;
-  grid-template-columns:
-    1fr 150px;
-  gap:12px;
-  align-items:center;
-  margin:10px 0;
-}
 
-.result-overlay{
+/* ===============================
+   MODAL
+================================ */
+
+.overlay{
   display:none;
   position:fixed;
   inset:0;
   z-index:100;
   align-items:center;
   justify-content:center;
-  background:rgba(34,8,28,.80);
+  padding:20px;
+  background:rgba(36,8,29,.82);
 }
 
-.result-overlay.show{
+.overlay.show{
   display:flex;
 }
 
-.result-box{
-  width:min(520px,94vw);
-  padding:36px;
-  border-radius:30px;
-  background:white;
+.modal{
+  width:min(580px,95vw);
+  padding:30px;
+  border-radius:28px;
   text-align:center;
+  background:white;
 }
 
 .result-count{
+  color:var(--pink);
   font-size:44px;
   font-weight:900;
-  color:var(--pink);
 }
+
+
+/* ===============================
+   REGISTRATION PDF
+================================ */
+
+.registration-paper{
+  width:794px;
+  min-height:1123px;
+  padding:65px;
+  color:#222;
+  background:#fff;
+  font-family:Tahoma,Arial,sans-serif;
+}
+
+.paper-title{
+  text-align:center;
+  margin-bottom:35px;
+}
+
+.paper-line{
+  border-top:2px solid #ed0a68;
+  margin:18px 0;
+}
+
+.paper-table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.paper-table td{
+  padding:12px 8px;
+  border-bottom:1px solid #ddd;
+  white-space:normal;
+}
+
+.pdf-source{
+  position:fixed;
+  left:-99999px;
+  top:0;
+}
+
+
+/* ===============================
+   UTIL
+================================ */
 
 .toast{
   position:fixed;
   bottom:20px;
   right:20px;
-  z-index:200;
+  z-index:250;
+  max-width:480px;
   padding:13px 18px;
-  max-width:460px;
   border-radius:14px;
-  background:#312b31;
-  color:white;
+  color:#fff;
+  background:#332d33;
   opacity:0;
   pointer-events:none;
   transition:.2s;
@@ -442,20 +553,17 @@ th{
 }
 
 .loading-box{
-  background:white;
   padding:22px 28px;
   border-radius:20px;
+  background:#fff;
   box-shadow:var(--shadow);
   font-weight:700;
 }
 
-.report-header{
-  display:flex;
-  align-items:end;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-bottom:15px;
-}
+
+/* ===============================
+   PRINT
+================================ */
 
 .print-title{
   display:none;
@@ -467,12 +575,12 @@ th{
     visibility:hidden;
   }
 
-  #printArea,
-  #printArea *{
+  #printAttendanceArea,
+  #printAttendanceArea *{
     visibility:visible;
   }
 
-  #printArea{
+  #printAttendanceArea{
     position:absolute;
     left:0;
     top:0;
@@ -480,23 +588,25 @@ th{
     box-shadow:none;
   }
 
-  #printControls{
-    display:none !important;
+  #reportControls{
+    display:none;
   }
 
   .print-title{
     display:block;
   }
 
-  table{
-    font-size:12px;
-  }
-
   th,
   td{
     white-space:normal;
+    font-size:11px;
   }
 }
+
+
+/* ===============================
+   MOBILE
+================================ */
 
 @media(max-width:900px){
 
@@ -516,7 +626,8 @@ th{
   }
 
   .grid4{
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:
+      1fr 1fr;
   }
 
   .grid2,
@@ -524,11 +635,11 @@ th{
     grid-template-columns:1fr;
   }
 
-  .reward-grid{
+  .rating-row{
     grid-template-columns:1fr;
   }
 
-  .rating-grid{
+  .reward-grid{
     grid-template-columns:1fr;
   }
 }
@@ -544,22 +655,25 @@ th{
 <script>
 
 // =====================================================
-// เปลี่ยนเฉพาะ URL ตรงนี้
+// ใส่ Apps Script /exec URL ตรงนี้เพียงจุดเดียว
 // =====================================================
 
 const BACKEND_URL =
-  'https://script.google.com/macros/s/AKfycbyb5B3VTlP0fJjqHECBTrxd1okjWIlYmk0UTzJzN57P4eZk3RGwnjmvDqGc2_hiRQad/exec';
+  'https://script.google.com/macros/s/AKfycbwChfnx8xTlgZLijudVmaww8i98yUYJ9Iv6kV1Oyub4Qf6ka2wd7SLshu0FYq85Voij/exec';
 
 </script>
 
 
 <div class="layout">
 
+
 <aside class="sidebar">
 
   <div class="brand">
-    🏆
-    <span>สนามสร้างปัญญา</span>
+    🛝
+    <span>
+      สนามสร้างปัญญา
+    </span>
   </div>
 
 
@@ -599,7 +713,7 @@ const BACKEND_URL =
     class="menu"
     onclick="showPage('evaluation',this)"
   >
-    ⭐ <span>ประเมิน</span>
+    ⭐ <span>แบบประเมิน</span>
   </button>
 
 
@@ -624,7 +738,9 @@ const BACKEND_URL =
 <main class="main">
 
 
-<!-- DASHBOARD -->
+<!-- =================================================
+     DASHBOARD
+================================================== -->
 
 <section
   id="dashboard"
@@ -642,14 +758,14 @@ const BACKEND_URL =
     </h1>
 
     <p>
-      ลงทะเบียน • เช็กชื่อ • Ranking • ประเมินความพึงพอใจ
+      ลงทะเบียน • เช็กชื่อด้วยใบหน้า • Ranking • แบบประเมิน
     </p>
 
     <div
       id="connectionStatus"
       class="connection"
     >
-      ⏳ กำลังเชื่อมระบบ
+      ⏳ กำลังเชื่อมระบบ...
     </div>
 
   </div>
@@ -666,6 +782,7 @@ const BACKEND_URL =
       </div>
     </div>
 
+
     <div class="card">
       เช็กชื่อวันนี้
       <div
@@ -674,6 +791,7 @@ const BACKEND_URL =
         0
       </div>
     </div>
+
 
     <div class="card">
       ยังไม่เช็กชื่อ
@@ -684,10 +802,11 @@ const BACKEND_URL =
       </div>
     </div>
 
+
     <div class="card">
-      ความพึงพอใจเฉลี่ย
+      ความพึงพอใจ
       <div
-        id="evaluationAverage"
+        id="overallScore"
         class="kpi">
         -
       </div>
@@ -729,7 +848,8 @@ const BACKEND_URL =
             </tr>
           </thead>
 
-          <tbody id="recentCheckIns">
+          <tbody
+            id="recentBody">
           </tbody>
 
         </table>
@@ -740,10 +860,56 @@ const BACKEND_URL =
 
   </div>
 
+
+  <div class="grid4">
+
+    <div class="card">
+      ผู้ตอบแบบประเมิน
+      <div
+        id="evaluationCount"
+        class="kpi">
+        0
+      </div>
+    </div>
+
+
+    <div class="card">
+      ความปลอดภัย
+      <div
+        id="safetyScore"
+        class="kpi">
+        -
+      </div>
+    </div>
+
+
+    <div class="card">
+      ความสะอาด
+      <div
+        id="cleanlinessScore"
+        class="kpi">
+        -
+      </div>
+    </div>
+
+
+    <div class="card">
+      ส่งเสริมการเรียนรู้
+      <div
+        id="learningScore"
+        class="kpi">
+        -
+      </div>
+    </div>
+
+  </div>
+
 </section>
 
 
-<!-- REGISTER -->
+<!-- =================================================
+     REGISTER
+================================================== -->
 
 <section
   id="register"
@@ -764,29 +930,20 @@ const BACKEND_URL =
 
 
       <div class="field">
-
         <label>ชื่อ *</label>
-
         <input id="firstName">
-
       </div>
 
 
       <div class="field">
-
         <label>นามสกุล *</label>
-
         <input id="lastName">
-
       </div>
 
 
       <div class="field">
-
         <label>ชื่อเล่น *</label>
-
         <input id="nickname">
-
       </div>
 
 
@@ -818,7 +975,9 @@ const BACKEND_URL =
 
       <div class="field">
 
-        <label>วันเกิด *</label>
+        <label>
+          วันเกิด *
+        </label>
 
         <input
           id="birthDate"
@@ -830,23 +989,17 @@ const BACKEND_URL =
 
 
       <div class="field">
-
         <label>หมู่บ้าน *</label>
-
         <input id="village">
-
       </div>
 
 
       <div class="field">
-
         <label>เบอร์โทร *</label>
-
         <input
           id="phone"
           type="tel"
         >
-
       </div>
 
     </div>
@@ -856,35 +1009,28 @@ const BACKEND_URL =
       id="guardianFields"
       style="
         display:none;
-        margin-top:14px
+        margin-top:15px
       "
     >
 
       <div class="form-grid">
 
-
         <div class="field">
-
           <label>
             ชื่อผู้ปกครอง *
           </label>
-
           <input id="guardianName">
-
         </div>
 
 
         <div class="field">
-
           <label>
             เบอร์ผู้ปกครอง
           </label>
-
           <input
             id="guardianPhone"
             type="tel"
           >
-
         </div>
 
       </div>
@@ -929,8 +1075,7 @@ const BACKEND_URL =
       id="registerVideo"
       autoplay
       muted
-      playsinline
-    >
+      playsinline>
     </video>
 
     <div class="face-guide">
@@ -950,7 +1095,9 @@ const BACKEND_URL =
 </section>
 
 
-<!-- CHECK IN -->
+<!-- =================================================
+     CHECK-IN
+================================================== -->
 
 <section
   id="checkin"
@@ -966,8 +1113,7 @@ const BACKEND_URL =
       id="checkVideo"
       autoplay
       muted
-      playsinline
-    >
+      playsinline>
     </video>
 
     <div class="face-guide">
@@ -990,13 +1136,13 @@ const BACKEND_URL =
     </h2>
 
     <p>
-      1 คน เช็กชื่อได้วันละ 1 ครั้ง
+      1 คนเช็กชื่อได้วันละ 1 ครั้ง
     </p>
 
     <p>
       หลังเช็กชื่อแล้ว
-      กรุณาออกจากหน้ากล้อง
-      ก่อนให้คนถัดไปเข้ามา
+      ให้บุคคลเดิมออกจากหน้ากล้อง
+      ก่อนคนถัดไปเข้ามา
     </p>
 
 
@@ -1022,7 +1168,9 @@ const BACKEND_URL =
 </section>
 
 
-<!-- RANKING -->
+<!-- =================================================
+     RANKING
+================================================== -->
 
 <section
   id="ranking"
@@ -1036,8 +1184,10 @@ const BACKEND_URL =
     </h2>
 
     <p>
-      จำนวนวันเข้าร่วมมากกว่าอยู่สูงกว่า
-      หากเท่ากัน ผู้ที่ถึงจำนวนครั้งนั้นก่อน
+      จำนวนวันที่มาใช้สนามมากกว่า
+      จะได้อันดับสูงกว่า
+      หากเท่ากัน
+      ผู้ที่สะสมถึงจำนวนดังกล่าวก่อน
       จะได้อันดับสูงกว่า
     </p>
 
@@ -1049,7 +1199,9 @@ const BACKEND_URL =
 </section>
 
 
-<!-- EVALUATION -->
+<!-- =================================================
+     SURVEY
+================================================== -->
 
 <section
   id="evaluation"
@@ -1066,13 +1218,18 @@ const BACKEND_URL =
       การใช้สนามเด็กเล่นสร้างปัญญา
     </p>
 
+    <p>
+      คะแนน 5 = มากที่สุด,
+      1 = น้อยที่สุด
+    </p>
+
 
     <div class="form-grid">
 
       <div class="field">
 
         <label>
-          ผู้ตอบแบบประเมิน *
+          ประเภทผู้ตอบ *
         </label>
 
         <select id="evalRespondentType">
@@ -1089,6 +1246,10 @@ const BACKEND_URL =
             ผู้ปกครอง
           </option>
 
+          <option value="ประชาชน">
+            ประชาชน
+          </option>
+
           <option value="อื่น ๆ">
             อื่น ๆ
           </option>
@@ -1099,13 +1260,10 @@ const BACKEND_URL =
 
 
       <div class="field">
-
         <label>
           หมู่บ้าน
         </label>
-
         <input id="evalVillage">
-
       </div>
 
     </div>
@@ -1115,138 +1273,59 @@ const BACKEND_URL =
       style="
         border:0;
         border-top:1px solid #eee;
-        margin:20px 0
+        margin:22px 0
       "
     >
 
 
-    <p>
-      1 = น้อยที่สุด,
-      5 = มากที่สุด
-    </p>
-
-
-    <div class="rating-grid">
-
-      <div>
-        ความพึงพอใจโดยรวม
-      </div>
-
-      <select id="scoreOverall">
-        <option value="">คะแนน</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
-
+    <div id="ratingArea">
     </div>
 
 
-    <div class="rating-grid">
+    <div
+      class="field"
+      style="margin-top:20px"
+    >
 
-      <div>
-        ความปลอดภัยของสนาม
-      </div>
+      <label>
+        สิ่งที่ชอบมากที่สุด
+      </label>
 
-      <select id="scoreSafety">
-        <option value="">คะแนน</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
-
-    </div>
-
-
-    <div class="rating-grid">
-
-      <div>
-        ความสะอาดและความเป็นระเบียบ
-      </div>
-
-      <select id="scoreCleanliness">
-        <option value="">คะแนน</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
-
-    </div>
-
-
-    <div class="rating-grid">
-
-      <div>
-        ความเหมาะสมของอุปกรณ์
-      </div>
-
-      <select id="scoreEquipment">
-        <option value="">คะแนน</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
-
-    </div>
-
-
-    <div class="rating-grid">
-
-      <div>
-        สนามช่วยส่งเสริมการเรียนรู้และพัฒนาการ
-      </div>
-
-      <select id="scoreLearning">
-        <option value="">คะแนน</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
-
-    </div>
-
-
-    <div class="rating-grid">
-
-      <div>
-        ต้องการกลับมาใช้สนามอีก
-      </div>
-
-      <select id="scoreReturn">
-        <option value="">คะแนน</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
+      <textarea
+        id="favoriteThing">
+      </textarea>
 
     </div>
 
 
     <div
       class="field"
-      style="margin-top:18px"
+      style="margin-top:15px"
     >
 
       <label>
-        ข้อเสนอแนะ
+        สิ่งที่ควรปรับปรุง
       </label>
 
       <textarea
-        id="evalSuggestion"
-        placeholder="ข้อเสนอแนะเพิ่มเติม..."
-      ></textarea>
+        id="improvement">
+      </textarea>
+
+    </div>
+
+
+    <div
+      class="field"
+      style="margin-top:15px"
+    >
+
+      <label>
+        ข้อเสนอแนะเพิ่มเติม
+      </label>
+
+      <textarea
+        id="suggestion">
+      </textarea>
 
     </div>
 
@@ -1264,7 +1343,9 @@ const BACKEND_URL =
 </section>
 
 
-<!-- REWARDS -->
+<!-- =================================================
+     REWARDS
+================================================== -->
 
 <section
   id="rewards"
@@ -1277,14 +1358,15 @@ const BACKEND_URL =
 
   <div
     id="rewardGrid"
-    class="reward-grid"
-  >
+    class="reward-grid">
   </div>
 
 </section>
 
 
-<!-- ADMIN -->
+<!-- =================================================
+     ADMIN
+================================================== -->
 
 <section
   id="admin"
@@ -1297,18 +1379,21 @@ const BACKEND_URL =
       ⚙️ ผู้ดูแลระบบ
     </h2>
 
+
     <div
       class="field"
-      style="max-width:420px"
+      style="max-width:350px"
     >
 
       <label>
-        Admin Key
+        รหัสผู้ดูแล
       </label>
 
       <input
-        id="adminKey"
+        id="adminPin"
         type="password"
+        maxlength="4"
+        placeholder="1234"
       >
 
     </div>
@@ -1331,22 +1416,22 @@ const BACKEND_URL =
   >
 
 
-    <!-- REPORT -->
+    <!-- ATTENDANCE REPORT -->
 
     <div
-      id="printArea"
+      id="printAttendanceArea"
       class="card"
     >
 
       <h2 class="print-title">
-        รายงานการเช็กชื่อ
-        สนามเด็กเล่นสร้างปัญญา
+        รายงานการเข้าใช้สนามเด็กเล่นสร้างปัญญา
       </h2>
 
 
       <div
-        id="printControls"
-        class="report-header"
+        id="reportControls"
+        class="form-grid"
+        style="margin-bottom:15px"
       >
 
         <div class="field">
@@ -1363,25 +1448,35 @@ const BACKEND_URL =
         </div>
 
 
-        <button
-          class="btn primary"
-          onclick="loadAttendanceReport()"
+        <div
+          style="
+            display:flex;
+            align-items:end;
+            gap:8px
+          "
         >
-          🔍 ดูรายงาน
-        </button>
+
+          <button
+            class="btn primary"
+            onclick="loadAttendanceReport()"
+          >
+            🔍 ดูรายงาน
+          </button>
 
 
-        <button
-          class="btn green"
-          onclick="printAttendance()"
-        >
-          🖨️ พิมพ์
-        </button>
+          <button
+            class="btn green"
+            onclick="window.print()"
+          >
+            🖨️ พิมพ์
+          </button>
+
+        </div>
 
       </div>
 
 
-      <h3 id="reportDateTitle">
+      <h3 id="reportTitle">
         รายงานเช็กชื่อ
       </h3>
 
@@ -1391,33 +1486,21 @@ const BACKEND_URL =
         <table>
 
           <thead>
-
             <tr>
-
-              <th>ลำดับ</th>
-
+              <th>#</th>
               <th>ชื่อ</th>
-
-              <th>นามสกุล</th>
-
+              <th>สกุล</th>
               <th>สถานะ</th>
-
               <th>ผู้ปกครอง</th>
-
               <th>หมู่บ้าน</th>
-
-              <th>วันที่เช็กชื่อ</th>
-
+              <th>วันที่</th>
               <th>เวลา</th>
-
               <th>วันที่ลงทะเบียน</th>
-
             </tr>
-
           </thead>
 
-
-          <tbody id="attendanceReportBody">
+          <tbody
+            id="attendanceBody">
           </tbody>
 
         </table>
@@ -1432,33 +1515,100 @@ const BACKEND_URL =
     <div class="card">
 
       <h3>
-        👥 ผู้ลงทะเบียนทั้งหมด
+        👥 ผู้ลงทะเบียน
       </h3>
+
 
       <div class="table-wrap">
 
         <table>
 
           <thead>
-
             <tr>
-
               <th>รหัส</th>
-              <th>ชื่อ</th>
-              <th>นามสกุล</th>
+              <th>ชื่อ-สกุล</th>
               <th>สถานะ</th>
               <th>หมู่บ้าน</th>
-              <th>โทรศัพท์</th>
-              <th>ผู้ปกครอง</th>
+              <th>เบอร์โทร</th>
               <th>วันที่ลงทะเบียน</th>
               <th>รูป</th>
-
+              <th>PDF</th>
             </tr>
-
           </thead>
 
+          <tbody
+            id="participantsBody">
+          </tbody>
 
-          <tbody id="participantTable">
+        </table>
+
+      </div>
+
+    </div>
+
+
+    <!-- EVALUATION REPORT -->
+
+    <div class="card">
+
+      <h3>
+        ⭐ รายงานแบบประเมิน
+      </h3>
+
+
+      <div class="form-grid">
+
+        <div class="field">
+          <label>วันที่เริ่ม</label>
+          <input
+            id="evalDateFrom"
+            type="date"
+          >
+        </div>
+
+
+        <div class="field">
+          <label>วันที่สิ้นสุด</label>
+          <input
+            id="evalDateTo"
+            type="date"
+          >
+        </div>
+
+      </div>
+
+
+      <button
+        class="btn primary"
+        style="margin-top:12px"
+        onclick="loadEvaluationReport()"
+      >
+        ดูผลประเมิน
+      </button>
+
+
+      <div
+        class="table-wrap"
+        style="margin-top:15px"
+      >
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>วันที่</th>
+              <th>ผู้ตอบ</th>
+              <th>หมู่บ้าน</th>
+              <th>ภาพรวม</th>
+              <th>ปลอดภัย</th>
+              <th>สะอาด</th>
+              <th>เรียนรู้</th>
+              <th>ข้อเสนอแนะ</th>
+            </tr>
+          </thead>
+
+          <tbody
+            id="evaluationReportBody">
           </tbody>
 
         </table>
@@ -1476,69 +1626,45 @@ const BACKEND_URL =
         🎁 เพิ่มรางวัล
       </h3>
 
+
       <div class="form-grid">
 
 
         <div class="field">
-
-          <label>
-            ชื่อรางวัล
-          </label>
-
+          <label>ชื่อรางวัล</label>
           <input id="rewardName">
-
         </div>
 
 
         <div class="field">
-
-          <label>
-            รายละเอียด
-          </label>
-
+          <label>รายละเอียด</label>
           <input id="rewardDescription">
-
         </div>
 
 
         <div class="field">
-
-          <label>
-            อันดับเริ่ม
-          </label>
-
+          <label>อันดับเริ่ม</label>
           <input
             id="rewardRankFrom"
             type="number"
             value="1"
           >
-
         </div>
 
 
         <div class="field">
-
-          <label>
-            อันดับสิ้นสุด
-          </label>
-
+          <label>อันดับสิ้นสุด</label>
           <input
             id="rewardRankTo"
             type="number"
             value="1"
           >
-
         </div>
 
 
         <div class="field">
-
-          <label>
-            URL รูปรางวัล
-          </label>
-
+          <label>URL รูปรางวัล</label>
           <input id="rewardImageUrl">
-
         </div>
 
       </div>
@@ -1546,7 +1672,7 @@ const BACKEND_URL =
 
       <button
         class="btn primary"
-        style="margin-top:14px"
+        style="margin-top:15px"
         onclick="saveReward()"
       >
         บันทึกรางวัล
@@ -1568,10 +1694,10 @@ const BACKEND_URL =
 
 <div
   id="resultOverlay"
-  class="result-overlay"
+  class="overlay"
 >
 
-  <div class="result-box">
+  <div class="modal">
 
     <h2 id="resultTitle">
       เช็กชื่อสำเร็จ
@@ -1580,20 +1706,162 @@ const BACKEND_URL =
     <h1 id="resultName">
     </h1>
 
-    <p>
-      เข้าร่วมกิจกรรมสะสม
-    </p>
-
     <div
       id="resultCount"
-      class="result-count"
-    >
+      class="result-count">
     </div>
 
     <h2 id="resultRank">
     </h2>
 
     <p id="resultTime">
+    </p>
+
+  </div>
+
+</div>
+
+
+<!-- REGISTER SUCCESS -->
+
+<div
+  id="registerOverlay"
+  class="overlay"
+>
+
+  <div class="modal">
+
+    <h2>
+      ✅ ลงทะเบียนสำเร็จ
+    </h2>
+
+    <h1 id="registeredName">
+    </h1>
+
+    <p>
+      รหัสผู้เข้าร่วม
+    </p>
+
+    <div
+      id="registeredId"
+      class="result-count">
+    </div>
+
+
+    <div
+      style="
+        display:flex;
+        justify-content:center;
+        gap:8px;
+        flex-wrap:wrap
+      "
+    >
+
+      <button
+        class="btn primary"
+        onclick="downloadRegistrationPdf()"
+      >
+        📄 รับใบลงทะเบียน PDF
+      </button>
+
+
+      <button
+        class="btn soft"
+        onclick="closeRegistrationResult()"
+      >
+        ปิด
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- PDF SOURCE -->
+
+<div class="pdf-source">
+
+  <div
+    id="registrationPaper"
+    class="registration-paper"
+  >
+
+    <div class="paper-title">
+
+      <h1>
+        ใบลงทะเบียน
+      </h1>
+
+      <h2>
+        การใช้สนามเด็กเล่นสร้างปัญญา
+      </h2>
+
+    </div>
+
+
+    <div class="paper-line">
+    </div>
+
+
+    <table class="paper-table">
+
+      <tr>
+        <td>รหัสลงทะเบียน</td>
+        <td id="pdfParticipantId"></td>
+      </tr>
+
+      <tr>
+        <td>ชื่อ</td>
+        <td id="pdfName"></td>
+      </tr>
+
+      <tr>
+        <td>ชื่อเล่น</td>
+        <td id="pdfNickname"></td>
+      </tr>
+
+      <tr>
+        <td>สถานะ</td>
+        <td id="pdfType"></td>
+      </tr>
+
+      <tr>
+        <td>วันเกิด</td>
+        <td id="pdfBirthDate"></td>
+      </tr>
+
+      <tr>
+        <td>หมู่บ้าน</td>
+        <td id="pdfVillage"></td>
+      </tr>
+
+      <tr>
+        <td>เบอร์โทร</td>
+        <td id="pdfPhone"></td>
+      </tr>
+
+      <tr>
+        <td>ชื่อผู้ปกครอง</td>
+        <td id="pdfGuardian"></td>
+      </tr>
+
+      <tr>
+        <td>วันที่ลงทะเบียน</td>
+        <td id="pdfRegistrationDate"></td>
+      </tr>
+
+    </table>
+
+
+    <div class="paper-line">
+    </div>
+
+
+    <p>
+      เอกสารฉบับนี้ออกจากระบบลงทะเบียน
+      สนามเด็กเล่นสร้างปัญญา
     </p>
 
   </div>
@@ -1614,8 +1882,7 @@ const BACKEND_URL =
 
   <div
     id="loadingText"
-    class="loading-box"
-  >
+    class="loading-box">
     กำลังทำงาน...
   </div>
 
@@ -1648,14 +1915,6 @@ let processing =
   false;
 
 
-let adminLoggedIn =
-  false;
-
-
-/*
-  จุดสำคัญสำหรับป้องกันคนเดิม
-  ถูกสแกนซ้ำไม่หยุด
-*/
 let waitingForFaceClear =
   false;
 
@@ -1664,8 +1923,16 @@ let noFaceRounds =
   0;
 
 
+let adminLoggedIn =
+  false;
+
+
+let latestRegistration =
+  null;
+
+
 // =====================================================
-// API POST + POLLING
+// API
 // =====================================================
 
 function api(
@@ -1735,14 +2002,11 @@ function api(
       form.method =
         'POST';
 
-
       form.action =
         BACKEND_URL;
 
-
       form.target =
         frameName;
-
 
       form.style.display =
         'none';
@@ -1765,9 +2029,7 @@ function api(
       addHidden(
         form,
         'payload',
-        JSON.stringify(
-          payload
-        )
+        JSON.stringify(payload)
       );
 
 
@@ -1781,9 +2043,8 @@ function api(
 
 
       setTimeout(
-        () => {
-          form.remove();
-        },
+        () =>
+          form.remove(),
         700
       );
 
@@ -1800,7 +2061,7 @@ function api(
 
 
           if (
-            attempts > 75
+            attempts > 80
           ) {
 
             iframe.remove();
@@ -1818,14 +2079,14 @@ function api(
 
           try {
 
-            const status =
+            const state =
               await checkStatus(
                 requestId
               );
 
 
             if (
-              !status.ready
+              !state.ready
             ) {
 
               setTimeout(
@@ -1841,18 +2102,18 @@ function api(
 
 
             if (
-              status.success
+              state.success
             ) {
 
               resolve(
-                status.result
+                state.result
               );
 
             } else {
 
               reject(
                 new Error(
-                  status.error ||
+                  state.error ||
                   'Backend error'
                 )
               );
@@ -1903,29 +2164,28 @@ function checkStatus(
         );
 
 
-      let done =
+      let completed =
         false;
 
 
-      const cleanup =
-        () => {
+      function cleanup() {
 
-          if (done) {
-            return;
-          }
-
-
-          done =
-            true;
+        if (completed) {
+          return;
+        }
 
 
-          delete window[
-            callbackName
-          ];
+        completed =
+          true;
 
 
-          script.remove();
-        };
+        delete window[
+          callbackName
+        ];
+
+
+        script.remove();
+      }
 
 
       const timer =
@@ -1948,7 +2208,7 @@ function checkStatus(
       window[
         callbackName
       ] =
-        result => {
+        data => {
 
           clearTimeout(
             timer
@@ -1959,7 +2219,7 @@ function checkStatus(
 
 
           resolve(
-            result
+            data
           );
         };
 
@@ -2043,7 +2303,7 @@ function addHidden(
 function createRequestId() {
 
   if (
-    crypto &&
+    window.crypto &&
     crypto.randomUUID
   ) {
 
@@ -2070,38 +2330,37 @@ window.addEventListener(
   async () => {
 
 
-    setTodayDate();
+    setupRatingFields();
 
 
-    const backend =
+    setToday();
+
+
+    const backendPromise =
       api('PING');
 
 
-    const ai =
-      loadFaceModels();
+    const modelPromise =
+      loadModels();
 
 
     try {
 
-      await backend;
+      await backendPromise;
 
 
-      document
-        .getElementById(
-          'connectionStatus'
-        )
-        .textContent =
-          '✅ Backend เชื่อมต่อแล้ว';
+      setText(
+        'connectionStatus',
+        '✅ Backend เชื่อมต่อแล้ว'
+      );
 
 
     } catch (error) {
 
-      document
-        .getElementById(
-          'connectionStatus'
-        )
-        .textContent =
-          '❌ Backend เชื่อมต่อไม่ได้';
+      setText(
+        'connectionStatus',
+        '❌ Backend เชื่อมต่อไม่ได้'
+      );
 
 
       showToast(
@@ -2112,12 +2371,12 @@ window.addEventListener(
 
     try {
 
-      await ai;
+      await modelPromise;
 
     } catch (error) {
 
       showToast(
-        'โหลด AI ไม่สำเร็จ'
+        'โหลดระบบตรวจจับใบหน้าไม่สำเร็จ'
       );
     }
 
@@ -2128,41 +2387,11 @@ window.addEventListener(
 );
 
 
-function setTodayDate() {
-
-  const today =
-    new Date();
-
-
-  const value =
-    [
-      today.getFullYear(),
-
-      String(
-        today.getMonth() + 1
-      ).padStart(2,'0'),
-
-      String(
-        today.getDate()
-      ).padStart(2,'0')
-
-    ].join('-');
-
-
-  document
-    .getElementById(
-      'reportDate'
-    )
-    .value =
-      value;
-}
-
-
 // =====================================================
-// AI
+// MODELS
 // =====================================================
 
-async function loadFaceModels() {
+async function loadModels() {
 
   await Promise.all([
 
@@ -2248,6 +2477,7 @@ function showPage(
   if (
     id === 'dashboard'
   ) {
+
     refreshDashboard();
   }
 
@@ -2255,6 +2485,7 @@ function showPage(
   if (
     id === 'ranking'
   ) {
+
     loadRanking();
   }
 
@@ -2262,6 +2493,7 @@ function showPage(
   if (
     id === 'rewards'
   ) {
+
     loadRewards();
   }
 }
@@ -2279,7 +2511,7 @@ async function openCamera(
   if (!modelsReady) {
 
     throw new Error(
-      'AI ยังโหลดไม่เสร็จ กรุณารอสักครู่'
+      'ระบบตรวจจับใบหน้ายังโหลดไม่เสร็จ'
     );
   }
 
@@ -2293,13 +2525,17 @@ async function openCamera(
       .getUserMedia({
 
         video:{
+
           facingMode:'user',
+
           width:{
             ideal:960
           },
+
           height:{
             ideal:720
           }
+
         },
 
         audio:false
@@ -2338,18 +2574,16 @@ async function openRegisterCamera() {
     );
 
 
-    document
-      .getElementById(
-        'registerStatus'
-      )
-      .textContent =
-        'มองตรงเข้ากล้อง แล้วกดบันทึก';
+    setText(
+      'registerStatus',
+      'มองตรงเข้ากล้อง แล้วกดบันทึก'
+    );
 
 
   } catch (error) {
 
     showToast(
-      'เปิดกล้องไม่สำเร็จ: ' +
+      'เปิดกล้องไม่ได้: ' +
       error.message
     );
   }
@@ -2365,6 +2599,7 @@ function stopCamera() {
     clearInterval(
       checkTimer
     );
+
 
     checkTimer =
       null;
@@ -2401,27 +2636,26 @@ function stopCamera() {
   [
     'registerVideo',
     'checkVideo'
-  ]
-    .forEach(
-      id => {
+  ].forEach(
+    id => {
 
-        const video =
-          document
-            .getElementById(id);
+      const video =
+        document
+          .getElementById(id);
 
 
-        if (video) {
+      if (video) {
 
-          video.srcObject =
-            null;
-        }
+        video.srcObject =
+          null;
       }
-    );
+    }
+  );
 }
 
 
 // =====================================================
-// FACE DETECTION
+// FACE
 // =====================================================
 
 async function detectFaces(
@@ -2436,7 +2670,6 @@ async function detectFaces(
       new faceapi
         .TinyFaceDetectorOptions({
 
-          // เร็วกว่า 320
           inputSize:224,
 
           scoreThreshold:.50
@@ -2483,10 +2716,6 @@ async function detectOneFace(
 }
 
 
-// =====================================================
-// FACE IMAGE
-// =====================================================
-
 function captureFaceImage(
   video,
   face
@@ -2503,14 +2732,14 @@ function captureFaceImage(
     ) * 0.30;
 
 
-  let sx =
+  const sx =
     Math.max(
       0,
       box.x - padding
     );
 
 
-  let sy =
+  const sy =
     Math.max(
       0,
       box.y - padding
@@ -2534,16 +2763,10 @@ function captureFaceImage(
 
 
   const canvas =
-    document
-      .createElement(
-        'canvas'
-      );
+    document.createElement(
+      'canvas'
+    );
 
-
-  /*
-    ขนาดเล็กลง
-    ส่งเข้า Drive เร็วขึ้น
-  */
 
   canvas.width =
     280;
@@ -2580,15 +2803,15 @@ function captureFaceImage(
 
 
 // =====================================================
-// REGISTER FIELDS
+// REGISTER
 // =====================================================
 
 function participantTypeChanged() {
 
-  const type =
+  const isChild =
     getValue(
       'participantType'
-    );
+    ) === 'เด็ก';
 
 
   document
@@ -2596,8 +2819,7 @@ function participantTypeChanged() {
       'guardianFields'
     )
     .style.display =
-
-      type === 'เด็ก'
+      isChild
         ? 'block'
         : 'none';
 }
@@ -2616,7 +2838,7 @@ function birthDateChanged() {
   }
 
 
-  const parts =
+  const p =
     value
       .split('-')
       .map(Number);
@@ -2624,9 +2846,9 @@ function birthDateChanged() {
 
   const birth =
     new Date(
-      parts[0],
-      parts[1]-1,
-      parts[2]
+      p[0],
+      p[1] - 1,
+      p[2]
     );
 
 
@@ -2673,10 +2895,6 @@ function birthDateChanged() {
   }
 }
 
-
-// =====================================================
-// REGISTER
-// =====================================================
 
 async function registerParticipant() {
 
@@ -2758,7 +2976,7 @@ async function registerParticipant() {
     ) {
 
       throw new Error(
-        'กรุณากรอกชื่อผู้ปกครอง'
+        'กรุณาระบุชื่อผู้ปกครอง'
       );
     }
 
@@ -2784,8 +3002,10 @@ async function registerParticipant() {
       true;
 
 
-    status.textContent =
-      'กำลังตรวจใบหน้า...';
+    setText(
+      'registerStatus',
+      'กำลังตรวจใบหน้า...'
+    );
 
 
     const face =
@@ -2807,8 +3027,10 @@ async function registerParticipant() {
       );
 
 
-    status.textContent =
-      'กำลังตรวจสอบข้อมูลซ้ำและบันทึก...';
+    setText(
+      'registerStatus',
+      'กำลังตรวจข้อมูลซ้ำและบันทึก...'
+    );
 
 
     showLoading(
@@ -2823,27 +3045,56 @@ async function registerParticipant() {
       );
 
 
-    status.textContent =
-      '✅ ลงทะเบียนสำเร็จ ' +
-      result.participantId;
+    latestRegistration =
+      result;
 
 
-    showToast(
-      'ลงทะเบียนสำเร็จ ' +
+    fillRegistrationPdf(
+      result
+    );
+
+
+    setText(
+      'registeredName',
+
+      result.firstName +
+      ' ' +
+      result.lastName
+    );
+
+
+    setText(
+      'registeredId',
       result.participantId
     );
 
 
-    clearRegisterForm();
+    document
+      .getElementById(
+        'registerOverlay'
+      )
+      .classList
+      .add('show');
 
 
-    await refreshDashboard();
+    setText(
+      'registerStatus',
+      '✅ ลงทะเบียนสำเร็จ'
+    );
+
+
+    clearRegistrationForm();
+
+
+    refreshDashboard();
 
 
   } catch (error) {
 
-    status.textContent =
-      error.message;
+    setText(
+      'registerStatus',
+      error.message
+    );
 
 
     showToast(
@@ -2862,7 +3113,7 @@ async function registerParticipant() {
 }
 
 
-function clearRegisterForm() {
+function clearRegistrationForm() {
 
   [
     'firstName',
@@ -2877,10 +3128,14 @@ function clearRegisterForm() {
     .forEach(
       id => {
 
-        document
-          .getElementById(id)
-          .value = '';
+        const el =
+          document
+            .getElementById(id);
 
+
+        if (el) {
+          el.value = '';
+        }
       }
     );
 
@@ -2893,12 +3148,179 @@ function clearRegisterForm() {
       '';
 
 
+  participantTypeChanged();
+}
+
+
+// =====================================================
+// REGISTRATION PDF
+// =====================================================
+
+function fillRegistrationPdf(
+  data
+) {
+
+  setText(
+    'pdfParticipantId',
+    data.participantId
+  );
+
+
+  setText(
+    'pdfName',
+    data.firstName +
+    ' ' +
+    data.lastName
+  );
+
+
+  setText(
+    'pdfNickname',
+    data.nickname || '-'
+  );
+
+
+  setText(
+    'pdfType',
+    data.participantType
+  );
+
+
+  setText(
+    'pdfBirthDate',
+    data.birthDate
+  );
+
+
+  setText(
+    'pdfVillage',
+    data.village
+  );
+
+
+  /*
+    PDF ปิดบังบางส่วนของเบอร์โทร
+  */
+
+  setText(
+    'pdfPhone',
+    maskPhone(
+      data.phone
+    )
+  );
+
+
+  setText(
+    'pdfGuardian',
+    data.guardianName || '-'
+  );
+
+
+  setText(
+    'pdfRegistrationDate',
+    data.registrationDateTime
+  );
+}
+
+
+async function downloadRegistrationPdf() {
+
+  if (
+    !latestRegistration
+  ) {
+
+    showToast(
+      'ไม่พบข้อมูลใบลงทะเบียน'
+    );
+
+    return;
+  }
+
+
+  try {
+
+    showLoading(
+      'กำลังสร้าง PDF...'
+    );
+
+
+    const paper =
+      document
+        .getElementById(
+          'registrationPaper'
+        );
+
+
+    const canvas =
+      await html2canvas(
+        paper,
+        {
+          scale:1.5,
+          backgroundColor:'#ffffff'
+        }
+      );
+
+
+    const image =
+      canvas.toDataURL(
+        'image/jpeg',
+        0.92
+      );
+
+
+    const {
+      jsPDF
+    } =
+      window.jspdf;
+
+
+    const pdf =
+      new jsPDF(
+        'p',
+        'mm',
+        'a4'
+      );
+
+
+    pdf.addImage(
+      image,
+      'JPEG',
+      0,
+      0,
+      210,
+      297
+    );
+
+
+    pdf.save(
+      'ใบลงทะเบียน_' +
+      latestRegistration.participantId +
+      '.pdf'
+    );
+
+
+  } catch (error) {
+
+    showToast(
+      'สร้าง PDF ไม่สำเร็จ'
+    );
+
+
+  } finally {
+
+    hideLoading();
+  }
+}
+
+
+function closeRegistrationResult() {
+
   document
     .getElementById(
-      'guardianFields'
+      'registerOverlay'
     )
-    .style.display =
-      'none';
+    .classList
+    .remove('show');
 }
 
 
@@ -2930,12 +3352,18 @@ async function startCheckIn() {
     );
 
 
-    status.textContent =
-      'พร้อมเช็กชื่อ';
+    setText(
+      'checkStatus',
+      'พร้อมเช็กชื่อ'
+    );
 
 
     waitingForFaceClear =
       false;
+
+
+    noFaceRounds =
+      0;
 
 
     checkTimer =
@@ -2956,9 +3384,7 @@ async function startCheckIn() {
 
 async function checkInScan() {
 
-  if (
-    processing
-  ) {
+  if (processing) {
     return;
   }
 
@@ -2981,7 +3407,6 @@ async function checkInScan() {
     !video.srcObject ||
     video.readyState < 2
   ) {
-
     return;
   }
 
@@ -2995,9 +3420,8 @@ async function checkInScan() {
 
 
     /*
-      หลังเช็กชื่อคนหนึ่งแล้ว
-      ระบบจะยังไม่เช็กซ้ำ
-      จนกว่าหน้าจะหายจากกล้อง
+      หลังเช็กแล้วต้องรอหน้าออก
+      จากกล้องก่อน
     */
 
     if (
@@ -3023,8 +3447,10 @@ async function checkInScan() {
             0;
 
 
-          status.textContent =
-            'พร้อมสำหรับคนถัดไป';
+          setText(
+            'checkStatus',
+            'พร้อมสำหรับคนถัดไป'
+          );
         }
 
       } else {
@@ -3033,8 +3459,10 @@ async function checkInScan() {
           0;
 
 
-        status.textContent =
-          'เช็กชื่อแล้ว กรุณาให้คนถัดไปเข้ากล้อง';
+        setText(
+          'checkStatus',
+          'เช็กชื่อแล้ว กรุณาออกจากหน้ากล้อง'
+        );
       }
 
 
@@ -3046,8 +3474,10 @@ async function checkInScan() {
       faces.length === 0
     ) {
 
-      status.textContent =
-        'กรุณามองตรงเข้ากล้อง';
+      setText(
+        'checkStatus',
+        'กรุณามองตรงเข้ากล้อง'
+      );
 
       return;
     }
@@ -3057,8 +3487,10 @@ async function checkInScan() {
       faces.length > 1
     ) {
 
-      status.textContent =
-        'กรุณาเข้ากล้องทีละ 1 คน';
+      setText(
+        'checkStatus',
+        'กรุณาเข้ากล้องทีละ 1 คน'
+      );
 
       return;
     }
@@ -3068,8 +3500,10 @@ async function checkInScan() {
       true;
 
 
-    status.textContent =
-      'กำลังตรวจสอบ...';
+    setText(
+      'checkStatus',
+      'กำลังตรวจสอบ...'
+    );
 
 
     const result =
@@ -3079,7 +3513,8 @@ async function checkInScan() {
 
           descriptor:
             Array.from(
-              faces[0].descriptor
+              faces[0]
+                .descriptor
             ),
 
           deviceId:
@@ -3093,22 +3528,19 @@ async function checkInScan() {
       !result.recognized
     ) {
 
-      status.textContent =
-        result.message;
+      setText(
+        'checkStatus',
+        result.message
+      );
 
 
       processing =
         false;
 
+
       return;
     }
 
-
-    /*
-      ไม่ว่าจะเป็น check-in ใหม่
-      หรือ "วันนี้เช็กแล้ว"
-      ก็รอคนนี้ออกจากกล้องก่อน
-    */
 
     waitingForFaceClear =
       true;
@@ -3124,8 +3556,10 @@ async function checkInScan() {
 
   } catch (error) {
 
-    status.textContent =
-      error.message;
+    setText(
+      'checkStatus',
+      error.message
+    );
 
 
     processing =
@@ -3138,74 +3572,57 @@ function showCheckInResult(
   result
 ) {
 
-  document
-    .getElementById(
-      'resultTitle'
+  setText(
+    'resultTitle',
+
+    result.duplicate
+      ? 'วันนี้คุณเช็กชื่อแล้ว'
+      : 'เช็กชื่อสำเร็จ 🎉'
+  );
+
+
+  setText(
+    'resultName',
+
+    result.firstName +
+    ' ' +
+    result.lastName +
+
+    (
+      result.nickname
+        ? ' (' +
+          result.nickname +
+          ')'
+        : ''
     )
-    .textContent =
-
-      result.duplicate
-        ? 'วันนี้คุณเช็กชื่อแล้ว'
-        : 'เช็กชื่อสำเร็จ 🎉';
+  );
 
 
-  document
-    .getElementById(
-      'resultName'
-    )
-    .textContent =
+  setText(
+    'resultCount',
 
-      result.firstName +
-
-      ' ' +
-
-      (
-        result.lastName ||
-        ''
-      ) +
-
-      (
-        result.nickname
-
-          ? ' (' +
-            result.nickname +
-            ')'
-
-          : ''
-      );
+    result.attendanceCount +
+    ' ครั้ง'
+  );
 
 
-  document
-    .getElementById(
-      'resultCount'
-    )
-    .textContent =
+  setText(
+    'resultRank',
 
-      result.attendanceCount +
-      ' ครั้ง';
-
-
-  document
-    .getElementById(
-      'resultRank'
-    )
-    .textContent =
-
-      result.rank
-        ? '🏆 อันดับ ' +
-          result.rank
-        : '🏆 -';
+    result.rank
+      ? '🏆 อันดับ ' +
+        result.rank
+      : '🏆 -'
+  );
 
 
-  document
-    .getElementById(
-      'resultTime'
-    )
-    .textContent =
+  setText(
+    'resultTime',
 
-      'เวลา ' +
-      result.checkInTime +
-      ' น.';
+    'เวลา ' +
+    result.checkInTime +
+    ' น.'
+  );
 
 
   document
@@ -3269,13 +3686,47 @@ async function refreshDashboard() {
 
 
     setText(
-      'evaluationAverage',
+      'overallScore',
 
-      data.evaluationCount
-
-        ? data.evaluationAverage +
+      data.evaluation.count
+        ? data.evaluation.overall +
           '/5'
+        : '-'
+    );
 
+
+    setText(
+      'evaluationCount',
+      data.evaluation.count
+    );
+
+
+    setText(
+      'safetyScore',
+
+      data.evaluation.count
+        ? data.evaluation.safety +
+          '/5'
+        : '-'
+    );
+
+
+    setText(
+      'cleanlinessScore',
+
+      data.evaluation.count
+        ? data.evaluation.cleanliness +
+          '/5'
+        : '-'
+    );
+
+
+    setText(
+      'learningScore',
+
+      data.evaluation.count
+        ? data.evaluation.learning +
+          '/5'
         : '-'
     );
 
@@ -3307,7 +3758,7 @@ function renderRecent(
   const body =
     document
       .getElementById(
-        'recentCheckIns'
+        'recentBody'
       );
 
 
@@ -3316,72 +3767,54 @@ function renderRecent(
     !list.length
   ) {
 
-    body.innerHTML = `
-      <tr>
-        <td colspan="4">
-          ยังไม่มีข้อมูล
-        </td>
-      </tr>
-    `;
+    body.innerHTML =
+      '<tr><td colspan="4">ยังไม่มีข้อมูล</td></tr>';
 
     return;
   }
 
 
   body.innerHTML =
-    list
-      .map(
-        item => `
+    list.map(
+      item => `
 
-          <tr>
+        <tr>
 
-            <td>
+          <td>
 
-              ${
-                escapeHtml(
-                  item.firstName
-                )
-              }
+            ${escapeHtml(
+              item.firstName
+            )}
 
-              ${
-                escapeHtml(
-                  item.lastName
-                )
-              }
+            ${escapeHtml(
+              item.lastName
+            )}
 
-            </td>
+          </td>
 
+          <td>
+            ${escapeHtml(
+              item.time
+            )}
+          </td>
 
-            <td>
-              ${
-                escapeHtml(
-                  item.checkInTime
-                )
-              }
-            </td>
+          <td>
+            ${item.count}
+          </td>
 
+          <td>
+            ${
+              item.rank
+                ? '#' +
+                  item.rank
+                : '-'
+            }
+          </td>
 
-            <td>
-              ${
-                item.attendanceCount
-              }
-            </td>
+        </tr>
 
-
-            <td>
-              ${
-                item.rank
-                  ? '#' +
-                    item.rank
-                  : '-'
-              }
-            </td>
-
-          </tr>
-
-        `
-      )
-      .join('');
+      `
+    ).join('');
 }
 
 
@@ -3485,11 +3918,9 @@ function renderRanking(
 
               <strong>
 
-                ${
-                  escapeHtml(
-                    item.firstName
-                  )
-                }
+                ${escapeHtml(
+                  item.firstName
+                )}
 
                 ${
                   item.nickname
@@ -3503,27 +3934,21 @@ function renderRanking(
 
               </strong>
 
-
               <br>
-
 
               <small>
 
-                ${
-                  escapeHtml(
-                    item.participantType ||
-                    ''
-                  )
-                }
+                ${escapeHtml(
+                  item.participantType ||
+                  ''
+                )}
 
                 •
 
-                ${
-                  escapeHtml(
-                    item.village ||
-                    ''
-                  )
-                }
+                ${escapeHtml(
+                  item.village ||
+                  ''
+                )}
 
               </small>
 
@@ -3538,9 +3963,7 @@ function renderRanking(
               "
             >
 
-              ${
-                item.attendanceCount
-              }
+              ${item.attendanceCount}
               ครั้ง
 
             </div>
@@ -3555,8 +3978,114 @@ function renderRanking(
 
 
 // =====================================================
-// EVALUATION
+// SURVEY FORM
 // =====================================================
+
+const ratingFields = [
+
+  {
+    id:'scoreOverall',
+    label:'ความพึงพอใจโดยรวม'
+  },
+
+  {
+    id:'scoreSafety',
+    label:'ความปลอดภัยของสนาม'
+  },
+
+  {
+    id:'scoreCleanliness',
+    label:'ความสะอาดและความเป็นระเบียบ'
+  },
+
+  {
+    id:'scoreEquipment',
+    label:'ความเหมาะสมของเครื่องเล่น'
+  },
+
+  {
+    id:'scoreLearning',
+    label:'ช่วยส่งเสริมการเรียนรู้'
+  },
+
+  {
+    id:'scoreDevelopment',
+    label:'ช่วยส่งเสริมพัฒนาการเด็ก'
+  },
+
+  {
+    id:'scoreConvenience',
+    label:'ความสะดวกในการเข้าใช้สนาม'
+  },
+
+  {
+    id:'scoreReturn',
+    label:'ต้องการกลับมาใช้สนามอีก'
+  },
+
+  {
+    id:'scoreRecommend',
+    label:'จะแนะนำให้ผู้อื่นมาใช้สนาม'
+  }
+
+];
+
+
+function setupRatingFields() {
+
+  const area =
+    document
+      .getElementById(
+        'ratingArea'
+      );
+
+
+  area.innerHTML =
+    ratingFields
+      .map(
+        item => `
+
+          <div class="rating-row">
+
+            <div>
+              ${item.label}
+            </div>
+
+            <select id="${item.id}">
+
+              <option value="">
+                คะแนน
+              </option>
+
+              <option value="5">
+                5 - มากที่สุด
+              </option>
+
+              <option value="4">
+                4 - มาก
+              </option>
+
+              <option value="3">
+                3 - ปานกลาง
+              </option>
+
+              <option value="2">
+                2 - น้อย
+              </option>
+
+              <option value="1">
+                1 - น้อยที่สุด
+              </option>
+
+            </select>
+
+          </div>
+
+        `
+      )
+      .join('');
+}
+
 
 async function submitEvaluation() {
 
@@ -3599,14 +4128,39 @@ async function submitEvaluation() {
           'scoreLearning'
         ),
 
+      developmentScore:
+        getValue(
+          'scoreDevelopment'
+        ),
+
+      convenienceScore:
+        getValue(
+          'scoreConvenience'
+        ),
+
       returnScore:
         getValue(
           'scoreReturn'
         ),
 
+      recommendScore:
+        getValue(
+          'scoreRecommend'
+        ),
+
+      favoriteThing:
+        getValue(
+          'favoriteThing'
+        ),
+
+      improvement:
+        getValue(
+          'improvement'
+        ),
+
       suggestion:
         getValue(
-          'evalSuggestion'
+          'suggestion'
         )
 
     };
@@ -3629,26 +4183,46 @@ async function submitEvaluation() {
     );
 
 
-    [
-      'evalRespondentType',
-      'evalVillage',
-      'scoreOverall',
-      'scoreSafety',
-      'scoreCleanliness',
-      'scoreEquipment',
-      'scoreLearning',
-      'scoreReturn',
-      'evalSuggestion'
-    ]
+    document
+      .getElementById(
+        'evalRespondentType'
+      )
+      .value =
+        '';
+
+
+    document
+      .getElementById(
+        'evalVillage'
+      )
+      .value =
+        '';
+
+
+    ratingFields
       .forEach(
-        id => {
+        item => {
 
           document
-            .getElementById(id)
-            .value = '';
-
+            .getElementById(
+              item.id
+            )
+            .value =
+              '';
         }
       );
+
+
+    [
+      'favoriteThing',
+      'improvement',
+      'suggestion'
+    ].forEach(
+      id =>
+        document
+          .getElementById(id)
+          .value = ''
+    );
 
 
     refreshDashboard();
@@ -3702,80 +4276,62 @@ async function loadRewards() {
 
 
     box.innerHTML =
-      result.data
-        .map(
-          item => `
+      result.data.map(
+        reward => `
 
-            <div class="reward">
+          <div class="reward-card">
 
-              ${
-                item.imageUrl
+            ${
+              reward.imageUrl
+                ? `
+                  <img
+                    src="${escapeHtml(
+                      reward.imageUrl
+                    )}"
+                    alt=""
+                  >
+                `
+                : `
+                  <div style="
+                    height:180px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    font-size:60px
+                  ">
+                    🎁
+                  </div>
+                `
+            }
 
-                  ? `
-                    <img
-                      src="${
-                        escapeHtml(
-                          item.imageUrl
-                        )
-                      }"
-                    >
-                  `
+            <div class="reward-body">
 
-                  : `
-                    <div
-                      style="
-                        height:180px;
-                        display:flex;
-                        align-items:center;
-                        justify-content:center;
-                        font-size:60px
-                      "
-                    >
-                      🎁
-                    </div>
-                  `
-              }
+              <strong>
+                ${escapeHtml(
+                  reward.rewardName
+                )}
+              </strong>
 
+              <p>
+                ${escapeHtml(
+                  reward.description ||
+                  ''
+                )}
+              </p>
 
-              <div class="reward-body">
-
-                <strong>
-                  ${
-                    escapeHtml(
-                      item.rewardName
-                    )
-                  }
-                </strong>
-
-
-                <p>
-                  ${
-                    escapeHtml(
-                      item.description ||
-                      ''
-                    )
-                  }
-                </p>
-
-
-                <small>
-                  อันดับ
-                  ${
-                    item.rankFrom
-                  }
-                  -
-                  ${
-                    item.rankTo
-                  }
-                </small>
-
-              </div>
+              <small>
+                อันดับ
+                ${reward.rankFrom}
+                -
+                ${reward.rankTo}
+              </small>
 
             </div>
 
-          `
-        )
-        .join('');
+          </div>
+
+        `
+      ).join('');
 
 
   } catch (error) {
@@ -3788,7 +4344,7 @@ async function loadRewards() {
 
 
 // =====================================================
-// ADMIN LOGIN
+// ADMIN
 // =====================================================
 
 async function adminLogin() {
@@ -3796,16 +4352,16 @@ async function adminLogin() {
   try {
 
     showLoading(
-      'กำลังเข้าสู่ระบบ...'
+      'กำลังตรวจสอบรหัส...'
     );
 
 
     await api(
       'ADMIN_LOGIN',
       {
-        adminKey:
+        pin:
           getValue(
-            'adminKey'
+            'adminPin'
           )
       }
     );
@@ -3849,7 +4405,7 @@ async function adminLogin() {
 
 
 // =====================================================
-// PARTICIPANTS TABLE
+// PARTICIPANTS
 // =====================================================
 
 async function loadParticipants() {
@@ -3858,12 +4414,10 @@ async function loadParticipants() {
     await api(
       'PARTICIPANTS',
       {
-
-        adminKey:
+        pin:
           getValue(
-            'adminKey'
+            'adminPin'
           )
-
       }
     );
 
@@ -3871,116 +4425,151 @@ async function loadParticipants() {
   const body =
     document
       .getElementById(
-        'participantTable'
+        'participantsBody'
       );
 
 
   body.innerHTML =
-    result.data
-      .map(
-        item => `
+    result.data.map(
+      (item,index) => `
 
-          <tr>
+        <tr>
 
-            <td>
-              ${
-                escapeHtml(
-                  item.participantId
-                )
-              }
-            </td>
+          <td>
+            ${escapeHtml(
+              item.participantId
+            )}
+          </td>
+
+          <td>
+
+            ${escapeHtml(
+              item.firstName
+            )}
+
+            ${escapeHtml(
+              item.lastName
+            )}
+
+          </td>
+
+          <td>
+            ${statusBadge(
+              item.participantType
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              item.village
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              item.phone
+            )}
+          </td>
+
+          <td>
+            ${escapeHtml(
+              item.registrationDateTime
+            )}
+          </td>
+
+          <td>
+
+            ${
+              item.faceImageUrl
+                ? `
+                  <a
+                    href="${escapeHtml(
+                      item.faceImageUrl
+                    )}"
+                    target="_blank"
+                  >
+                    ดูรูป
+                  </a>
+                `
+                : '-'
+            }
+
+          </td>
+
+          <td>
+
+            <button
+              class="btn soft"
+              onclick="adminPdf(${index})"
+            >
+              PDF
+            </button>
+
+          </td>
+
+        </tr>
+
+      `
+    ).join('');
 
 
-            <td>
-              ${
-                escapeHtml(
-                  item.firstName
-                )
-              }
-            </td>
+  window.__participants =
+    result.data;
+}
 
 
-            <td>
-              ${
-                escapeHtml(
-                  item.lastName
-                )
-              }
-            </td>
+function adminPdf(index) {
+
+  const item =
+    window.__participants[
+      index
+    ];
 
 
-            <td>
-              ${statusBadge(
-                item.participantType
-              )}
-            </td>
+  latestRegistration = {
+
+    participantId:
+      item.participantId,
+
+    firstName:
+      item.firstName,
+
+    lastName:
+      item.lastName,
+
+    nickname:
+      item.nickname,
+
+    participantType:
+      item.participantType,
+
+    birthDate:
+      item.birthDate,
+
+    village:
+      item.village,
+
+    phone:
+      item.phone,
+
+    guardianName:
+      item.guardianName,
+
+    guardianPhone:
+      item.guardianPhone,
+
+    registrationDateTime:
+      item.registrationDateTime
+
+  };
 
 
-            <td>
-              ${
-                escapeHtml(
-                  item.village
-                )
-              }
-            </td>
+  fillRegistrationPdf(
+    latestRegistration
+  );
 
 
-            <td>
-              ${
-                escapeHtml(
-                  item.phone
-                )
-              }
-            </td>
-
-
-            <td>
-              ${
-                escapeHtml(
-                  item.guardianName ||
-                  '-'
-                )
-              }
-            </td>
-
-
-            <td>
-              ${
-                escapeHtml(
-                  item.registrationDateTime
-                )
-              }
-            </td>
-
-
-            <td>
-
-              ${
-                item.faceImageUrl
-
-                  ? `
-                    <a
-                      href="${
-                        escapeHtml(
-                          item.faceImageUrl
-                        )
-                      }"
-                      target="_blank"
-                    >
-                      ดูรูป
-                    </a>
-                  `
-
-                  : '-'
-              }
-
-            </td>
-
-          </tr>
-
-        `
-      )
-      .join('');
+  downloadRegistrationPdf();
 }
 
 
@@ -3990,19 +4579,12 @@ async function loadParticipants() {
 
 async function loadAttendanceReport() {
 
-  if (
-    !adminLoggedIn
-  ) {
+  if (!adminLoggedIn) {
     return;
   }
 
 
   try {
-
-    showLoading(
-      'กำลังโหลดรายงาน...'
-    );
-
 
     const date =
       getValue(
@@ -4015,9 +4597,9 @@ async function loadAttendanceReport() {
         'ATTENDANCE_REPORT',
         {
 
-          adminKey:
+          pin:
             getValue(
-              'adminKey'
+              'adminPin'
             ),
 
           date:
@@ -4027,25 +4609,23 @@ async function loadAttendanceReport() {
       );
 
 
-    document
-      .getElementById(
-        'reportDateTitle'
-      )
-      .textContent =
+    setText(
+      'reportTitle',
 
-        'รายงานเช็กชื่อ วันที่ ' +
-        displayDate(
-          date
-        ) +
-        ' จำนวน ' +
-        result.data.length +
-        ' คน';
+      'รายงานวันที่ ' +
+      displayDate(
+        date
+      ) +
+      ' จำนวน ' +
+      result.data.length +
+      ' คน'
+    );
 
 
     const body =
       document
         .getElementById(
-          'attendanceReportBody'
+          'attendanceBody'
         );
 
 
@@ -4053,107 +4633,202 @@ async function loadAttendanceReport() {
       !result.data.length
     ) {
 
-      body.innerHTML = `
-        <tr>
-          <td colspan="9">
-            ไม่มีข้อมูลในวันที่เลือก
-          </td>
-        </tr>
-      `;
+      body.innerHTML =
+        '<tr><td colspan="9">ไม่มีข้อมูล</td></tr>';
 
       return;
     }
 
 
     body.innerHTML =
-      result.data
-        .map(
-          (item,index) => `
+      result.data.map(
+        (item,index) => `
 
-            <tr>
+          <tr>
 
-              <td>
-                ${
-                  index + 1
-                }
-              </td>
+            <td>
+              ${index + 1}
+            </td>
 
+            <td>
+              ${escapeHtml(
+                item.firstName
+              )}
+            </td>
 
-              <td>
-                ${
-                  escapeHtml(
-                    item.firstName
-                  )
-                }
-              </td>
+            <td>
+              ${escapeHtml(
+                item.lastName
+              )}
+            </td>
 
+            <td>
+              ${statusBadge(
+                item.participantType
+              )}
+            </td>
 
-              <td>
-                ${
-                  escapeHtml(
-                    item.lastName
-                  )
-                }
-              </td>
+            <td>
+              ${escapeHtml(
+                item.guardianName ||
+                '-'
+              )}
+            </td>
 
+            <td>
+              ${escapeHtml(
+                item.village
+              )}
+            </td>
 
-              <td>
-                ${statusBadge(
-                  item.participantType
-                )}
-              </td>
+            <td>
+              ${escapeHtml(
+                item.checkInDate
+              )}
+            </td>
 
+            <td>
+              ${escapeHtml(
+                item.checkInTime
+              )}
+            </td>
 
-              <td>
-                ${
-                  escapeHtml(
-                    item.guardianName ||
-                    '-'
-                  )
-                }
-              </td>
+            <td>
+              ${escapeHtml(
+                item.registrationDateTime
+              )}
+            </td>
 
+          </tr>
 
-              <td>
-                ${
-                  escapeHtml(
-                    item.village
-                  )
-                }
-              </td>
-
-
-              <td>
-                ${
-                  escapeHtml(
-                    item.checkInDate
-                  )
-                }
-              </td>
+        `
+      ).join('');
 
 
-              <td>
-                ${
-                  escapeHtml(
-                    item.checkInTime
-                  )
-                }
-              </td>
+  } catch (error) {
+
+    showToast(
+      error.message
+    );
+  }
+}
 
 
-              <td>
-                ${
-                  escapeHtml(
-                    item.registrationDateTime
-                  )
-                }
-              </td>
+// =====================================================
+// EVALUATION REPORT
+// =====================================================
 
-            </tr>
+async function loadEvaluationReport() {
 
-          `
-        )
-        .join('');
+  if (!adminLoggedIn) {
+    return;
+  }
+
+
+  try {
+
+    showLoading(
+      'กำลังโหลดผลประเมิน...'
+    );
+
+
+    const result =
+      await api(
+        'EVALUATION_REPORT',
+        {
+
+          pin:
+            getValue(
+              'adminPin'
+            ),
+
+          dateFrom:
+            getValue(
+              'evalDateFrom'
+            ),
+
+          dateTo:
+            getValue(
+              'evalDateTo'
+            )
+
+        }
+      );
+
+
+    const body =
+      document
+        .getElementById(
+          'evaluationReportBody'
+        );
+
+
+    if (
+      !result.data.length
+    ) {
+
+      body.innerHTML =
+        '<tr><td colspan="8">ไม่มีข้อมูล</td></tr>';
+
+      return;
+    }
+
+
+    body.innerHTML =
+      result.data.map(
+        item => `
+
+          <tr>
+
+            <td>
+              ${escapeHtml(
+                item.date
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                item.respondentType
+              )}
+            </td>
+
+            <td>
+              ${escapeHtml(
+                item.village ||
+                '-'
+              )}
+            </td>
+
+            <td>
+              ${item.overall}
+            </td>
+
+            <td>
+              ${item.safety}
+            </td>
+
+            <td>
+              ${item.cleanliness}
+            </td>
+
+            <td>
+              ${item.learning}
+            </td>
+
+            <td>
+
+              ${escapeHtml(
+                item.suggestion ||
+                item.improvement ||
+                '-'
+              )}
+
+            </td>
+
+          </tr>
+
+        `
+      ).join('');
 
 
   } catch (error) {
@@ -4170,79 +4845,57 @@ async function loadAttendanceReport() {
 }
 
 
-function printAttendance() {
-
-  if (
-    !adminLoggedIn
-  ) {
-
-    showToast(
-      'กรุณาเข้าสู่ระบบผู้ดูแลก่อน'
-    );
-
-    return;
-  }
-
-
-  window.print();
-}
-
-
 // =====================================================
-// SAVE REWARD
+// REWARD ADMIN
 // =====================================================
 
 async function saveReward() {
 
   try {
 
-    const reward = {
-
-      rewardName:
-        getValue(
-          'rewardName'
-        ),
-
-      description:
-        getValue(
-          'rewardDescription'
-        ),
-
-      rankFrom:
-        Number(
-          getValue(
-            'rewardRankFrom'
-          ) || 1
-        ),
-
-      rankTo:
-        Number(
-          getValue(
-            'rewardRankTo'
-          ) || 1
-        ),
-
-      imageUrl:
-        getValue(
-          'rewardImageUrl'
-        ),
-
-      displayOrder:1
-
-    };
-
-
     await api(
       'SAVE_REWARD',
       {
 
-        adminKey:
+        pin:
           getValue(
-            'adminKey'
+            'adminPin'
           ),
 
-        reward:
-          reward
+        reward:{
+
+          rewardName:
+            getValue(
+              'rewardName'
+            ),
+
+          description:
+            getValue(
+              'rewardDescription'
+            ),
+
+          rankFrom:
+            Number(
+              getValue(
+                'rewardRankFrom'
+              ) || 1
+            ),
+
+          rankTo:
+            Number(
+              getValue(
+                'rewardRankTo'
+              ) || 1
+            ),
+
+          imageUrl:
+            getValue(
+              'rewardImageUrl'
+            ),
+
+          displayOrder:1
+
+        }
 
       }
     );
@@ -4269,19 +4922,52 @@ async function saveReward() {
 // HELPERS
 // =====================================================
 
-function statusBadge(
-  type
-) {
+function setToday() {
+
+  const now =
+    new Date();
+
+
+  const value =
+    now.getFullYear() +
+    '-' +
+    String(
+      now.getMonth() + 1
+    ).padStart(2,'0') +
+    '-' +
+    String(
+      now.getDate()
+    ).padStart(2,'0');
+
+
+  [
+    'reportDate',
+    'evalDateFrom',
+    'evalDateTo'
+  ].forEach(
+    id => {
+
+      const el =
+        document
+          .getElementById(id);
+
+
+      if (el) {
+        el.value = value;
+      }
+    }
+  );
+}
+
+
+function statusBadge(type) {
 
   if (
     type === 'เด็ก'
   ) {
 
     return `
-      <span class="
-        badge
-        badge-child
-      ">
+      <span class="badge child">
         เด็ก
       </span>
     `;
@@ -4289,55 +4975,68 @@ function statusBadge(
 
 
   return `
-    <span class="
-      badge
-      badge-parent
-    ">
-      ${
-        escapeHtml(
-          type || '-'
-        )
-      }
+    <span class="badge parent">
+      ${escapeHtml(
+        type || '-'
+      )}
     </span>
   `;
 }
 
 
-function displayDate(
-  value
-) {
+function displayDate(value) {
 
   if (!value) {
     return '';
   }
 
 
-  const parts =
-    value
-      .split('-');
+  const p =
+    value.split('-');
 
 
   if (
-    parts.length !== 3
+    p.length !== 3
   ) {
-
     return value;
   }
 
 
   return (
-    parts[2] +
+    p[2] +
     '/' +
-    parts[1] +
+    p[1] +
     '/' +
-    parts[0]
+    p[0]
   );
 }
 
 
-function getValue(
-  id
-) {
+function maskPhone(value) {
+
+  const phone =
+    String(
+      value || ''
+    );
+
+
+  if (
+    phone.length < 7
+  ) {
+
+    return phone;
+  }
+
+
+  return (
+    phone.slice(0,3) +
+    '-XXX-' +
+    phone.slice(-4)
+  );
+}
+
+
+function getValue(id) {
 
   const el =
     document
@@ -4350,28 +5049,54 @@ function getValue(
 }
 
 
-function setText(
-  id,
-  value
-) {
+function setText(id,value) {
 
-  document
-    .getElementById(id)
-    .textContent =
+  const el =
+    document
+      .getElementById(id);
+
+
+  if (el) {
+
+    el.textContent =
       value;
+  }
 }
 
 
-function showLoading(
-  text
-) {
+function showToast(message) {
 
-  document
-    .getElementById(
-      'loadingText'
-    )
-    .textContent =
-      text;
+  const toast =
+    document
+      .getElementById(
+        'toast'
+      );
+
+
+  toast.textContent =
+    message;
+
+
+  toast.classList
+    .add('show');
+
+
+  setTimeout(
+    () =>
+      toast.classList
+        .remove('show'),
+    3500
+  );
+}
+
+
+function showLoading(text) {
+
+  setText(
+    'loadingText',
+    text ||
+    'กำลังทำงาน...'
+  );
 
 
   document
@@ -4394,40 +5119,7 @@ function hideLoading() {
 }
 
 
-function showToast(
-  message
-) {
-
-  const toast =
-    document
-      .getElementById(
-        'toast'
-      );
-
-
-  toast.textContent =
-    message;
-
-
-  toast.classList
-    .add('show');
-
-
-  setTimeout(
-    () => {
-
-      toast.classList
-        .remove('show');
-
-    },
-    3500
-  );
-}
-
-
-function escapeHtml(
-  value
-) {
+function escapeHtml(value) {
 
   return String(
     value || ''
