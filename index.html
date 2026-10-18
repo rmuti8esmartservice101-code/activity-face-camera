@@ -1,930 +1,1680 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1"
-  >
-
-  <title>Face Camera Kiosk</title>
-
-  <script
-    defer
-    src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js">
-  </script>
-
-  <style>
-    :root {
-      --pink:#ed0a68;
-      --purple:#76258c;
-      --green:#28b59f;
-      --orange:#ff8438;
-      --dark:#211622;
-    }
-
-    * {
-      box-sizing:border-box;
-    }
-
-    body {
-      margin:0;
-      min-height:100vh;
-
-      font-family:
-        Tahoma,
-        Arial,
-        sans-serif;
-
-      background:
-        linear-gradient(
-          135deg,
-          #ffedf5,
-          #f8eafa
-        );
-
-      color:#333;
-    }
-
-    .app {
-      min-height:100vh;
-      display:flex;
-      flex-direction:column;
-    }
-
-    .header {
-      padding:18px 24px;
-      color:white;
-
-      background:
-        linear-gradient(
-          90deg,
-          var(--pink),
-          var(--purple)
-        );
 
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    }
-
-    .header h1 {
-      margin:0;
-      font-size:22px;
-    }
-
-    .header small {
-      opacity:.8;
-    }
-
-    .main {
-      width:min(1200px,96%);
-      margin:24px auto;
-      display:grid;
-
-      grid-template-columns:
-        1.35fr .65fr;
-
-      gap:22px;
-    }
-
-    .camera-card {
-      background:var(--dark);
-      border-radius:30px;
-      overflow:hidden;
-      min-height:650px;
-      position:relative;
-
-      box-shadow:
-        0 20px 60px
-        rgba(101,28,73,.18);
-    }
-
-    .video-wrap {
-      height:650px;
-      position:relative;
-    }
-
-    video {
-      width:100%;
-      height:100%;
-      object-fit:cover;
-
-      transform:scaleX(-1);
-    }
-
-    .face-guide {
-      position:absolute;
-
-      width:290px;
-      height:365px;
-
-      border:
-        4px solid
-        rgba(255,255,255,.95);
-
-      border-radius:48%;
-
-      left:50%;
-      top:47%;
-
-      transform:
-        translate(-50%,-50%);
-
-      box-shadow:
-        0 0 0 9999px
-        rgba(0,0,0,.18);
-
-      pointer-events:none;
-    }
-
-    .status {
-      position:absolute;
-
-      bottom:25px;
-      left:50%;
-
-      transform:
-        translateX(-50%);
-
-      color:white;
-
-      background:
-        rgba(0,0,0,.65);
-
-      padding:
-        12px 22px;
-
-      border-radius:30px;
-
-      text-align:center;
-
-      min-width:270px;
-    }
-
-    .side {
-      display:flex;
-      flex-direction:column;
-      gap:18px;
-    }
-
-    .card {
-      background:white;
-      border-radius:25px;
-      padding:22px;
-
-      box-shadow:
-        0 15px 45px
-        rgba(130,25,80,.10);
-    }
-
-    .card h2,
-    .card h3 {
-      margin-top:0;
-    }
-
-    button {
-      border:0;
-      padding:13px 18px;
-      border-radius:15px;
-
-      font-size:16px;
-      font-weight:bold;
-
-      cursor:pointer;
-    }
-
-    .primary {
-      color:white;
-
-      background:
-        linear-gradient(
-          90deg,
-          var(--pink),
-          var(--purple)
-        );
-    }
-
-    .secondary {
-      color:var(--pink);
-      background:#ffe6f0;
-    }
-
-    .result {
-      display:none;
-
-      position:fixed;
-      inset:0;
-
-      background:
-        rgba(37,13,32,.78);
-
-      z-index:100;
-
-      align-items:center;
-      justify-content:center;
-
-      padding:20px;
-    }
-
-    .result.show {
-      display:flex;
-    }
-
-    .result-box {
-      width:min(540px,95vw);
-
-      background:white;
-      border-radius:34px;
-
-      padding:38px;
-
-      text-align:center;
-
-      box-shadow:
-        0 30px 100px
-        rgba(0,0,0,.3);
-    }
-
-    .check {
-      width:84px;
-      height:84px;
-
-      margin:
-        0 auto 20px;
-
-      background:var(--green);
-
-      color:white;
-
-      border-radius:50%;
-
-      display:flex;
-      align-items:center;
-      justify-content:center;
-
-      font-size:42px;
-    }
-
-    .person-name {
-      font-size:30px;
-      font-weight:bold;
-      margin:10px 0;
-    }
-
-    .big {
-      color:var(--pink);
-
-      font-size:45px;
-      font-weight:900;
-    }
-
-    .debug {
-      font-family:monospace;
-      font-size:12px;
-
-      background:#f6f3f5;
-
-      padding:12px;
-      border-radius:12px;
-
-      word-break:break-all;
-    }
-
-    @media(max-width:850px) {
-      .main {
-        grid-template-columns:1fr;
-      }
-
-      .camera-card,
-      .video-wrap {
-        min-height:520px;
-        height:520px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<title>
+  ระบบเช็กชื่อกิจกรรม
+</title>
+
+<script
+  defer
+  src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js">
+</script>
+
+<style>
+
+:root{
+  --pink:#ed0a68;
+  --purple:#72278c;
+  --green:#2fb5a5;
+  --blue:#159dd4;
+  --orange:#ff7f38;
+  --bg:#fff7fa;
+  --dark:#211921;
+  --text:#343139;
+  --muted:#88818a;
+  --shadow:0 12px 35px rgba(130,30,80,.12);
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Tahoma,Arial,sans-serif;
+  color:var(--text);
+  background:var(--bg);
+}
+
+button,input{
+  font:inherit;
+}
+
+.layout{
+  display:flex;
+  min-height:100vh;
+}
+
+.sidebar{
+  width:230px;
+  position:fixed;
+  top:0;
+  left:0;
+  bottom:0;
+  padding:18px 14px;
+  color:#fff;
+  background:
+    linear-gradient(
+      180deg,
+      #ed0a68,
+      #b31d81,
+      #65277f
+    );
+}
+
+.logo{
+  padding:12px;
+  font-size:19px;
+  font-weight:800;
+  margin-bottom:18px;
+}
+
+.menu{
+  display:block;
+  width:100%;
+  border:0;
+  color:#fff;
+  background:transparent;
+  padding:13px;
+  margin:5px 0;
+  border-radius:15px;
+  text-align:left;
+  cursor:pointer;
+}
+
+.menu.active,
+.menu:hover{
+  color:var(--pink);
+  background:#fff;
+}
+
+.main{
+  margin-left:230px;
+  width:calc(100% - 230px);
+  padding:24px;
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+.hero{
+  color:white;
+  padding:32px;
+  border-radius:28px;
+  background:
+    linear-gradient(
+      120deg,
+      #ed0968,
+      #db1075,
+      #772584
+    );
+  box-shadow:var(--shadow);
+}
+
+.hero h1{
+  margin:5px 0;
+}
+
+.grid4{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  margin:18px 0;
+}
+
+.card{
+  background:white;
+  padding:20px;
+  border-radius:22px;
+  box-shadow:var(--shadow);
+  margin-bottom:18px;
+}
+
+.kpi{
+  font-size:30px;
+  font-weight:900;
+  color:var(--pink);
+}
+
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+label{
+  font-size:13px;
+  font-weight:700;
+}
+
+input{
+  width:100%;
+  display:block;
+  margin-top:6px;
+  padding:12px;
+  border:1px solid #eadde4;
+  border-radius:13px;
+  outline:none;
+}
+
+.btn{
+  border:0;
+  border-radius:14px;
+  padding:12px 18px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.primary{
+  color:#fff;
+  background:
+    linear-gradient(
+      90deg,
+      var(--pink),
+      var(--purple)
+    );
+}
+
+.soft{
+  color:var(--pink);
+  background:#ffe7f0;
+}
+
+.camera{
+  position:relative;
+  height:540px;
+  overflow:hidden;
+  background:#19141a;
+  border-radius:28px;
+}
+
+video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transform:scaleX(-1);
+}
+
+.guide{
+  position:absolute;
+  left:50%;
+  top:48%;
+  width:270px;
+  height:350px;
+  transform:translate(-50%,-50%);
+  border:4px solid white;
+  border-radius:48%;
+  box-shadow:0 0 0 9999px rgba(0,0,0,.2);
+}
+
+.status{
+  position:absolute;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  color:white;
+  background:rgba(0,0,0,.65);
+  padding:10px 18px;
+  border-radius:25px;
+  min-width:270px;
+  text-align:center;
+}
+
+.rank-row{
+  display:grid;
+  grid-template-columns:60px 1fr 100px;
+  gap:10px;
+  align-items:center;
+  padding:12px;
+  margin:7px 0;
+  border-radius:15px;
+  background:#fff5f9;
+}
+
+.rank-no{
+  font-size:20px;
+  font-weight:900;
+  color:var(--pink);
+}
+
+.reward-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.reward{
+  overflow:hidden;
+  border-radius:20px;
+  background:#fff;
+  box-shadow:var(--shadow);
+}
+
+.reward img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+}
+
+.reward .body{
+  padding:15px;
+}
+
+.result{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:100;
+  align-items:center;
+  justify-content:center;
+  background:rgba(40,10,30,.78);
+}
+
+.result.show{
+  display:flex;
+}
+
+.result-box{
+  width:min(520px,94vw);
+  padding:35px;
+  text-align:center;
+  border-radius:30px;
+  background:#fff;
+}
+
+.big{
+  font-size:45px;
+  font-weight:900;
+  color:var(--pink);
+}
+
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:200;
+  opacity:0;
+  color:#fff;
+  padding:12px 18px;
+  border-radius:13px;
+  background:#332c32;
+  transition:.2s;
+}
+
+.toast.show{
+  opacity:1;
+}
+
+#backendFrame{
+  display:none;
+}
+
+@media(max-width:900px){
+
+  .sidebar{
+    width:74px;
+  }
+
+  .menu span,
+  .logo span{
+    display:none;
+  }
+
+  .main{
+    margin-left:74px;
+    width:calc(100% - 74px);
+  }
+
+  .grid4{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .grid2,
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .reward-grid{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+</style>
 </head>
 
 <body>
 
-<div class="app">
 
-  <header class="header">
+<!-- เปลี่ยน URL นี้จุดเดียว -->
 
-    <div>
-      <h1>📷 จุดเช็กชื่อกิจกรรม</h1>
-      <small>
-        Face Check-in Kiosk
-      </small>
-    </div>
+<script>
 
-    <div id="clock"></div>
+const BACKEND_URL =
+  'PUT_APPS_SCRIPT_EXEC_URL_HERE';
 
-  </header>
-
-  <main class="main">
-
-    <div class="camera-card">
-
-      <div class="video-wrap">
-
-        <video
-          id="video"
-          autoplay
-          muted
-          playsinline>
-        </video>
-
-        <div class="face-guide"></div>
-
-        <div
-          class="status"
-          id="status">
-          กำลังเริ่มระบบ...
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="side">
-
-      <div class="card">
-
-        <h2>เช็กชื่อด้วยใบหน้า</h2>
-
-        <p>
-          กรุณายืนหน้ากล้องทีละ 1 คน
-          และมองตรงเข้าหากล้อง
-        </p>
-
-        <button
-          class="primary"
-          onclick="startCamera()">
-          เปิดกล้อง
-        </button>
-
-        <button
-          class="secondary"
-          onclick="stopCamera()">
-          ปิดกล้อง
-        </button>
-
-      </div>
-
-      <div class="card">
-
-        <h3>สถานะการเชื่อมต่อ</h3>
-
-        <p id="connectionStatus">
-          กำลังตรวจสอบ...
-        </p>
-
-        <div
-          id="debug"
-          class="debug">
-        </div>
-
-      </div>
-
-    </div>
-
-  </main>
-
-</div>
+</script>
 
 
-<div
-  class="result"
-  id="result">
+<iframe
+  id="backendFrame"
+  src="">
+</iframe>
 
-  <div class="result-box">
 
-    <div class="check">
-      ✓
-    </div>
+<div class="layout">
 
-    <h2 id="resultTitle">
-      เช็กชื่อสำเร็จ
-    </h2>
+<aside class="sidebar">
 
-    <div
-      class="person-name"
-      id="resultName">
-    </div>
+  <div class="logo">
+    🏆
+    <span>
+      Face Check-in
+    </span>
+  </div>
+
+  <button
+    class="menu active"
+    onclick="showPage('dashboard',this)"
+  >
+    ▦
+    <span>แดชบอร์ด</span>
+  </button>
+
+  <button
+    class="menu"
+    onclick="showPage('register',this)"
+  >
+    👤
+    <span>ลงทะเบียน</span>
+  </button>
+
+  <button
+    class="menu"
+    onclick="showPage('checkin',this)"
+  >
+    📷
+    <span>เช็กชื่อ</span>
+  </button>
+
+  <button
+    class="menu"
+    onclick="showPage('ranking',this)"
+  >
+    🏆
+    <span>อันดับ</span>
+  </button>
+
+  <button
+    class="menu"
+    onclick="showPage('rewards',this)"
+  >
+    🎁
+    <span>รางวัล</span>
+  </button>
+
+</aside>
+
+
+<main class="main">
+
+
+<!-- DASHBOARD -->
+
+<section
+  id="dashboard"
+  class="page active"
+>
+
+  <div class="hero">
+
+    <p>สวัสดี 👋</p>
+
+    <h1>
+      ระบบเช็กชื่อกิจกรรม
+    </h1>
 
     <p>
-      เข้าร่วมกิจกรรมสะสม
+      ลงทะเบียน • เช็กชื่อด้วยใบหน้า • Ranking • Rewards
     </p>
 
-    <div
-      class="big"
-      id="resultCount">
-      0 ครั้ง
+  </div>
+
+
+  <div class="grid4">
+
+    <div class="card">
+      ผู้ลงทะเบียน
+      <div
+        id="total"
+        class="kpi">
+        0
+      </div>
     </div>
 
-    <p style="font-size:22px">
-      🏆
-      <strong id="resultRank"></strong>
-    </p>
+    <div class="card">
+      มาแล้ววันนี้
+      <div
+        id="today"
+        class="kpi">
+        0
+      </div>
+    </div>
 
-    <p id="resultTime"></p>
+    <div class="card">
+      ยังไม่มา
+      <div
+        id="notYet"
+        class="kpi">
+        0
+      </div>
+    </div>
+
+    <div class="card">
+      หมู่บ้าน
+      <div
+        id="villages"
+        class="kpi">
+        0
+      </div>
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h3>
+      🏆 Top 10
+    </h3>
+
+    <div id="dashboardRanking">
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- REGISTER -->
+
+<section
+  id="register"
+  class="page"
+>
+
+<div class="grid2">
+
+  <div class="card">
+
+    <h2>
+      👤 ลงทะเบียน
+    </h2>
+
+    <div class="form-grid">
+
+      <div>
+        <label>ชื่อ *</label>
+        <input id="firstName">
+      </div>
+
+      <div>
+        <label>นามสกุล *</label>
+        <input id="lastName">
+      </div>
+
+      <div>
+        <label>ชื่อเล่น *</label>
+        <input id="nickname">
+      </div>
+
+      <div>
+        <label>วันเกิด *</label>
+
+        <input
+          id="birthDate"
+          type="date"
+          onchange="checkAge()"
+        >
+      </div>
+
+      <div>
+        <label>หมู่บ้าน *</label>
+        <input id="village">
+      </div>
+
+      <div>
+        <label>เบอร์โทร *</label>
+        <input id="phone">
+      </div>
+
+    </div>
+
+
+    <div
+      id="guardian"
+      style="
+        display:none;
+        margin-top:15px
+      "
+    >
+
+      <div class="form-grid">
+
+        <div>
+          <label>
+            ชื่อผู้ปกครอง *
+          </label>
+          <input id="guardianName">
+        </div>
+
+        <div>
+          <label>
+            เบอร์ผู้ปกครอง
+          </label>
+          <input id="guardianPhone">
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <button
+      class="btn primary"
+      style="margin-top:18px"
+      onclick="captureRegister()"
+    >
+      📸 บันทึกข้อมูลและใบหน้า
+    </button>
+
+  </div>
+
+
+  <div class="camera">
+
+    <video
+      id="registerVideo"
+      autoplay
+      muted
+      playsinline>
+    </video>
+
+    <div class="guide">
+    </div>
+
+    <div
+      class="status"
+      id="registerStatus">
+      กดเปิดกล้อง
+    </div>
+
+
+    <button
+      class="btn primary"
+      style="
+        position:absolute;
+        top:15px;
+        left:15px
+      "
+      onclick="
+        openCamera(
+          'registerVideo',
+          'registerStatus'
+        )
+      "
+    >
+      เปิดกล้อง
+    </button>
 
   </div>
 
 </div>
 
+</section>
+
+
+<!-- CHECK IN -->
+
+<section
+  id="checkin"
+  class="page"
+>
+
+<div class="grid2">
+
+  <div class="camera">
+
+    <video
+      id="checkVideo"
+      autoplay
+      muted
+      playsinline>
+    </video>
+
+    <div class="guide">
+    </div>
+
+    <div
+      class="status"
+      id="checkStatus">
+      กดเปิดกล้อง
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <h2>
+      📷 เช็กชื่อรายวัน
+    </h2>
+
+    <p>
+      ผู้เข้าร่วม 1 คนต่อครั้ง
+    </p>
+
+    <button
+      class="btn primary"
+      onclick="startCheckIn()"
+    >
+      เปิดกล้องและเริ่มสแกน
+    </button>
+
+    <button
+      class="btn soft"
+      onclick="stopCamera()"
+    >
+      ปิดกล้อง
+    </button>
+
+  </div>
+
+</div>
+
+</section>
+
+
+<!-- RANKING -->
+
+<section
+  id="ranking"
+  class="page"
+>
+
+<div class="card">
+
+  <h2>
+    🏆 Ranking 1–100
+  </h2>
+
+  <p>
+    จำนวนครั้งมากกว่าอยู่สูงกว่า
+    หากเท่ากัน
+    ผู้ที่สะสมถึงจำนวนนั้นก่อน
+    จะได้อันดับสูงกว่า
+  </p>
+
+  <div id="ranking100">
+  </div>
+
+</div>
+
+</section>
+
+
+<!-- REWARDS -->
+
+<section
+  id="rewards"
+  class="page"
+>
+
+<h2>
+  🎁 รางวัล
+</h2>
+
+<div
+  id="rewardGrid"
+  class="reward-grid">
+</div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<!-- RESULT -->
+
+<div
+  id="result"
+  class="result"
+>
+
+<div class="result-box">
+
+  <h2 id="resultTitle">
+    เช็กชื่อสำเร็จ
+  </h2>
+
+  <h1 id="resultName">
+  </h1>
+
+  <p>
+    เข้าร่วมสะสม
+  </p>
+
+  <div
+    class="big"
+    id="resultCount">
+  </div>
+
+  <h2 id="resultRank">
+  </h2>
+
+  <p id="resultTime">
+  </p>
+
+</div>
+
+</div>
+
+
+<div
+  id="toast"
+  class="toast">
+</div>
+
 
 <script>
+
 
 const MODEL_URL =
   'https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@master/weights';
 
-let stream = null;
-
-let scanning = false;
-
-let processing = false;
 
 let modelsReady = false;
 
-const video =
-  document.getElementById('video');
+let stream = null;
+
+let checkTimer = null;
+
+let processing = false;
 
 
-// ==============================================
-// START
-// ==============================================
+const pending =
+  new Map();
+
+
+// =====================================================
+// BACKEND
+// =====================================================
+
+function backend(
+  action,
+  payload={}
+) {
+
+  return new Promise(
+    (resolve,reject)=>{
+
+
+      const requestId =
+        crypto.randomUUID();
+
+
+      pending.set(
+        requestId,
+        {
+          resolve,
+          reject
+        }
+      );
+
+
+      const frame =
+        document.getElementById(
+          'backendFrame'
+        );
+
+
+      frame
+        .contentWindow
+        .postMessage(
+          {
+            type:
+              'APP_REQUEST',
+
+            requestId:
+              requestId,
+
+            action:
+              action,
+
+            payload:
+              payload
+          },
+          '*'
+        );
+
+
+      setTimeout(
+        ()=>{
+
+          if (
+            pending.has(
+              requestId
+            )
+          ) {
+
+            pending.delete(
+              requestId
+            );
+
+            reject(
+              new Error(
+                'Backend ไม่ตอบสนอง กรุณาลองใหม่'
+              )
+            );
+          }
+
+        },
+        30000
+      );
+
+    }
+  );
+}
+
 
 window.addEventListener(
-  'load',
-  async () => {
+  'message',
+  event=>{
 
-    startClock();
 
-    checkParent();
+    if (
+      !event.data ||
+      event.data.type !==
+      'APP_RESPONSE'
+    ) {
 
-    await loadModels();
+      return;
+    }
+
+
+    const item =
+      pending.get(
+        event.data.requestId
+      );
+
+
+    if (!item) {
+      return;
+    }
+
+
+    pending.delete(
+      event.data.requestId
+    );
+
+
+    if (
+      event.data.success
+    ) {
+
+      item.resolve(
+        event.data.result
+      );
+
+    } else {
+
+      item.reject(
+        new Error(
+          event.data.error
+        )
+      );
+    }
 
   }
 );
 
 
-// ==============================================
-// CLOCK
-// ==============================================
+// =====================================================
+// LOAD
+// =====================================================
 
-function startClock() {
+window.addEventListener(
+  'load',
+  async ()=>{
 
-  const render = () => {
+
+    if (
+      BACKEND_URL ===
+      'PUT_APPS_SCRIPT_EXEC_URL_HERE'
+    ) {
+
+      alert(
+        'กรุณาใส่ Apps Script Web App URL ใน BACKEND_URL ก่อน'
+      );
+
+      return;
+    }
+
 
     document
-      .getElementById('clock')
-      .textContent =
-
-      new Intl.DateTimeFormat(
-        'th-TH',
-        {
-          dateStyle:'medium',
-          timeStyle:'medium'
-        }
+      .getElementById(
+        'backendFrame'
       )
-      .format(new Date());
-
-  };
-
-  render();
-
-  setInterval(
-    render,
-    1000
-  );
-
-}
+      .src =
+        BACKEND_URL;
 
 
-// ==============================================
-// CONNECTION
-// ==============================================
+    try {
 
-function checkParent() {
+      await loadModels();
 
-  const connected =
-    window.opener &&
-    !window.opener.closed;
+      setTimeout(
+        ()=>{
+          refreshDashboard();
+          loadRewards();
+        },
+        1800
+      );
 
-  document
-    .getElementById(
-      'connectionStatus'
-    )
-    .textContent =
-      connected
-      ? '✅ เชื่อมกับระบบหลักแล้ว'
-      : '⚠️ กรุณาเปิดหน้านี้จากระบบหลัก';
+    } catch(e) {
 
-}
+      showToast(
+        e.message
+      );
+    }
+
+  }
+);
 
 
-// ==============================================
-// LOAD MODELS
-// ==============================================
+// =====================================================
+// FACE MODEL
+// =====================================================
 
 async function loadModels() {
 
-  const status =
-    document.getElementById('status');
-
-  try {
-
-    status.textContent =
-      'กำลังโหลด AI ตรวจจับใบหน้า...';
-
-    await faceapi.nets
-      .tinyFaceDetector
-      .loadFromUri(
-        MODEL_URL
-      );
-
-    await faceapi.nets
-      .faceLandmark68TinyNet
-      .loadFromUri(
-        MODEL_URL
-      );
-
-    await faceapi.nets
-      .faceRecognitionNet
-      .loadFromUri(
-        MODEL_URL
-      );
-
-    modelsReady = true;
-
-    status.textContent =
-      'ระบบ AI พร้อมแล้ว กดเปิดกล้อง';
-
-  } catch (err) {
-
-    console.error(err);
-
-    status.textContent =
-      'โหลด AI ไม่สำเร็จ';
-
-    debug(
-      err.message || err
+  await faceapi.nets
+    .tinyFaceDetector
+    .loadFromUri(
+      MODEL_URL
     );
 
-  }
 
+  await faceapi.nets
+    .faceLandmark68TinyNet
+    .loadFromUri(
+      MODEL_URL
+    );
+
+
+  await faceapi.nets
+    .faceRecognitionNet
+    .loadFromUri(
+      MODEL_URL
+    );
+
+
+  modelsReady = true;
 }
 
 
-// ==============================================
-// CAMERA
-// ==============================================
+// =====================================================
+// NAV
+// =====================================================
 
-async function startCamera() {
+function showPage(
+  id,
+  btn
+) {
+
+  document
+    .querySelectorAll(
+      '.page'
+    )
+    .forEach(
+      x =>
+        x.classList.remove(
+          'active'
+        )
+    );
+
+
+  document
+    .getElementById(id)
+    .classList.add(
+      'active'
+    );
+
+
+  document
+    .querySelectorAll(
+      '.menu'
+    )
+    .forEach(
+      x =>
+        x.classList.remove(
+          'active'
+        )
+    );
+
+
+  if (btn) {
+    btn.classList.add(
+      'active'
+    );
+  }
+
+
+  if (
+    id === 'dashboard'
+  ) {
+    refreshDashboard();
+  }
+
+
+  if (
+    id === 'ranking'
+  ) {
+    loadRanking();
+  }
+
+
+  if (
+    id === 'rewards'
+  ) {
+    loadRewards();
+  }
+}
+
+
+// =====================================================
+// CAMERA
+// =====================================================
+
+async function openCamera(
+  videoId,
+  statusId
+) {
 
   if (!modelsReady) {
 
-    alert(
-      'กรุณารอระบบ AI โหลดให้เสร็จก่อน'
+    showToast(
+      'AI ยังโหลดไม่เสร็จ'
     );
 
-    return;
-
+    return false;
   }
+
+
+  stopCamera();
+
 
   try {
 
-    if (
-      !navigator.mediaDevices ||
-      !navigator.mediaDevices.getUserMedia
-    ) {
+    stream =
+      await navigator
+        .mediaDevices
+        .getUserMedia({
+          video:{
+            facingMode:'user',
+            width:{
+              ideal:1280
+            },
+            height:{
+              ideal:720
+            }
+          },
+          audio:false
+        });
 
-      throw new Error(
-        'Browser นี้ไม่รองรับกล้อง'
+
+    const video =
+      document.getElementById(
+        videoId
       );
 
-    }
-
-    stopCamera();
-
-    document
-      .getElementById('status')
-      .textContent =
-        'กำลังขออนุญาตกล้อง...';
-
-    stream =
-      await navigator.mediaDevices
-      .getUserMedia({
-
-        video:{
-          facingMode:'user',
-
-          width:{
-            ideal:1280
-          },
-
-          height:{
-            ideal:720
-          }
-
-        },
-
-        audio:false
-
-      });
 
     video.srcObject =
       stream;
 
+
     await video.play();
 
-    scanning = true;
 
     document
-      .getElementById('status')
+      .getElementById(
+        statusId
+      )
       .textContent =
-        'พร้อมแล้ว กรุณามองที่กล้อง';
+        'พร้อมแล้ว';
 
-    scanLoop();
 
-  } catch (err) {
+    return true;
 
-    console.error(err);
 
-    let msg =
-      'เปิดกล้องไม่สำเร็จ';
-
-    if (
-      err.name ===
-      'NotAllowedError'
-    ) {
-
-      msg =
-        'ไม่ได้รับอนุญาตให้ใช้กล้อง';
-
-    }
-
-    if (
-      err.name ===
-      'NotFoundError'
-    ) {
-
-      msg =
-        'ไม่พบกล้องในเครื่อง';
-
-    }
-
-    if (
-      err.name ===
-      'NotReadableError'
-    ) {
-
-      msg =
-        'กล้องอาจถูกโปรแกรมอื่นใช้งาน';
-
-    }
+  } catch(e) {
 
     document
-      .getElementById('status')
+      .getElementById(
+        statusId
+      )
       .textContent =
-        msg;
+        'เปิดกล้องไม่ได้';
 
-    debug(
-      err.name +
+
+    showToast(
+      e.name +
       ': ' +
-      err.message
+      e.message
     );
 
-  }
 
+    return false;
+  }
 }
 
 
 function stopCamera() {
 
-  scanning = false;
+  if (checkTimer) {
+
+    clearInterval(
+      checkTimer
+    );
+
+    checkTimer = null;
+  }
+
 
   if (stream) {
 
     stream
       .getTracks()
       .forEach(
-        track => track.stop()
+        x =>
+          x.stop()
       );
 
     stream = null;
-
   }
-
-  video.srcObject = null;
-
 }
 
 
-// ==============================================
-// FACE LOOP
-// ==============================================
+// =====================================================
+// FACE
+// =====================================================
 
-async function scanLoop() {
-
-  while (scanning) {
-
-    await sleep(1300);
-
-    if (
-      processing ||
-      !scanning ||
-      video.readyState < 2
-    ) {
-
-      continue;
-
-    }
-
-    try {
-
-      const faces =
-        await faceapi
-          .detectAllFaces(
-
-            video,
-
-            new faceapi
-              .TinyFaceDetectorOptions({
-
-                inputSize:320,
-
-                scoreThreshold:.55
-
-              })
-
-          )
-          .withFaceLandmarks(true)
-          .withFaceDescriptors();
-
-      if (
-        faces.length === 0
-      ) {
-
-        setStatus(
-          'กรุณามองตรงเข้าหากล้อง'
-        );
-
-        continue;
-
-      }
-
-      if (
-        faces.length > 1
-      ) {
-
-        setStatus(
-          'กรุณาเข้ากล้องทีละ 1 คน'
-        );
-
-        continue;
-
-      }
-
-      processing = true;
-
-      setStatus(
-        'กำลังตรวจสอบใบหน้า...'
-      );
-
-      const descriptor =
-        Array.from(
-          faces[0].descriptor
-        );
-
-      sendCheckIn(
-        descriptor
-      );
-
-    } catch (err) {
-
-      console.error(err);
-
-      processing = false;
-
-      debug(
-        err.message || err
-      );
-
-    }
-
-  }
-
-}
-
-
-// ==============================================
-// SEND TO APPS SCRIPT WINDOW
-// ==============================================
-
-function sendCheckIn(
-  descriptor
+async function getFace(
+  video
 ) {
 
+  const faces =
+    await faceapi
+      .detectAllFaces(
+
+        video,
+
+        new faceapi
+          .TinyFaceDetectorOptions({
+            inputSize:320,
+            scoreThreshold:.55
+          })
+
+      )
+      .withFaceLandmarks(true)
+      .withFaceDescriptors();
+
+
   if (
-    !window.opener ||
-    window.opener.closed
+    faces.length === 0
   ) {
 
-    processing = false;
-
-    setStatus(
-      'ไม่พบหน้าระบบหลัก'
+    throw new Error(
+      'ไม่พบใบหน้า'
     );
-
-    alert(
-      'กรุณาเปิดหน้ากล้องจาก Dashboard ของระบบ'
-    );
-
-    return;
-
   }
 
-  window.opener.postMessage(
-    {
-      type:'FACE_CHECKIN',
 
-      descriptor:
-        descriptor,
+  if (
+    faces.length > 1
+  ) {
 
-      deviceId:
-        'MACBOOK-KIOSK-01'
-    },
+    throw new Error(
+      'กรุณาเข้ากล้องทีละคน'
+    );
+  }
 
-    '*'
-  );
 
+  return faces[0];
 }
 
 
-// ==============================================
-// RECEIVE RESULT
-// ==============================================
+function snapshot(
+  video
+) {
 
-window.addEventListener(
-  'message',
-  event => {
-
-    if (
-      !event.data ||
-      event.data.type !==
-      'CHECKIN_RESULT'
-    ) {
-
-      return;
-
-    }
-
-    handleResult(
-      event.data.result
+  const canvas =
+    document.createElement(
+      'canvas'
     );
 
-  }
-);
+
+  const width =
+    640;
 
 
-function handleResult(res) {
+  canvas.width =
+    width;
+
+
+  canvas.height =
+    Math.round(
+      width *
+      video.videoHeight /
+      video.videoWidth
+    );
+
+
+  canvas
+    .getContext('2d')
+    .drawImage(
+      video,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+
+  return canvas.toDataURL(
+    'image/jpeg',
+    .78
+  );
+}
+
+
+// =====================================================
+// REGISTER
+// =====================================================
+
+function checkAge() {
+
+  const v =
+    value(
+      'birthDate'
+    );
+
+
+  if (!v) return;
+
+
+  const birth =
+    new Date(v);
+
+
+  const today =
+    new Date();
+
+
+  let age =
+    today.getFullYear() -
+    birth.getFullYear();
+
+
+  const m =
+    today.getMonth() -
+    birth.getMonth();
+
 
   if (
-    !res ||
-    !res.recognized
+    m < 0 ||
+    (
+      m === 0 &&
+      today.getDate() <
+      birth.getDate()
+    )
   ) {
+    age--;
+  }
 
-    setStatus(
-      res?.message ||
-      'ไม่พบข้อมูล'
+
+  document
+    .getElementById(
+      'guardian'
+    )
+    .style.display =
+      age < 15
+      ? 'block'
+      : 'none';
+}
+
+
+async function captureRegister() {
+
+  try {
+
+    const data = {
+
+      firstName:
+        value('firstName'),
+
+      lastName:
+        value('lastName'),
+
+      nickname:
+        value('nickname'),
+
+      birthDate:
+        value('birthDate'),
+
+      village:
+        value('village'),
+
+      phone:
+        value('phone'),
+
+      guardianName:
+        value('guardianName'),
+
+      guardianPhone:
+        value('guardianPhone')
+    };
+
+
+    if (
+      !data.firstName ||
+      !data.lastName ||
+      !data.nickname ||
+      !data.birthDate ||
+      !data.village ||
+      !data.phone
+    ) {
+
+      throw new Error(
+        'กรุณากรอกข้อมูลให้ครบ'
+      );
+    }
+
+
+    const video =
+      document.getElementById(
+        'registerVideo'
+      );
+
+
+    if (
+      !video.srcObject
+    ) {
+
+      throw new Error(
+        'กรุณาเปิดกล้องก่อน'
+      );
+    }
+
+
+    document
+      .getElementById(
+        'registerStatus'
+      )
+      .textContent =
+        'กำลังตรวจใบหน้า...';
+
+
+    const face =
+      await getFace(
+        video
+      );
+
+
+    data.faceDescriptor =
+      Array.from(
+        face.descriptor
+      );
+
+
+    data.faceImageDataUrl =
+      snapshot(video);
+
+
+    document
+      .getElementById(
+        'registerStatus'
+      )
+      .textContent =
+        'กำลังบันทึก...';
+
+
+    const result =
+      await backend(
+        'REGISTER',
+        data
+      );
+
+
+    document
+      .getElementById(
+        'registerStatus'
+      )
+      .textContent =
+        'ลงทะเบียนสำเร็จ';
+
+
+    showToast(
+      'ลงทะเบียนสำเร็จ ' +
+      result.participantId
     );
+
+
+    clearRegister();
+
+    refreshDashboard();
+
+
+  } catch(e) {
+
+    document
+      .getElementById(
+        'registerStatus'
+      )
+      .textContent =
+        e.message;
+
+
+    showToast(
+      e.message
+    );
+  }
+}
+
+
+function clearRegister() {
+
+  [
+    'firstName',
+    'lastName',
+    'nickname',
+    'birthDate',
+    'village',
+    'phone',
+    'guardianName',
+    'guardianPhone'
+  ]
+  .forEach(
+    id =>
+      document
+        .getElementById(id)
+        .value = ''
+  );
+
+
+  document
+    .getElementById(
+      'guardian'
+    )
+    .style.display =
+      'none';
+}
+
+
+// =====================================================
+// CHECK-IN
+// =====================================================
+
+async function startCheckIn() {
+
+  const ok =
+    await openCamera(
+      'checkVideo',
+      'checkStatus'
+    );
+
+
+  if (!ok) return;
+
+
+  checkTimer =
+    setInterval(
+      scanCheckIn,
+      1800
+    );
+}
+
+
+async function scanCheckIn() {
+
+  if (processing) {
+    return;
+  }
+
+
+  const video =
+    document.getElementById(
+      'checkVideo'
+    );
+
+
+  if (
+    !video.srcObject ||
+    video.readyState < 2
+  ) {
+    return;
+  }
+
+
+  try {
+
+    const face =
+      await getFace(
+        video
+      );
+
+
+    processing = true;
+
+
+    document
+      .getElementById(
+        'checkStatus'
+      )
+      .textContent =
+        'กำลังตรวจสอบ...';
+
+
+    const result =
+      await backend(
+        'CHECKIN',
+        {
+          descriptor:
+            Array.from(
+              face.descriptor
+            ),
+
+          deviceId:
+            'MACBOOK-KIOSK-01'
+        }
+      );
+
+
+    if (
+      !result.recognized
+    ) {
+
+      document
+        .getElementById(
+          'checkStatus'
+        )
+        .textContent =
+          result.message;
+
+
+      setTimeout(
+        ()=>{
+          processing=false;
+        },
+        2000
+      );
+
+      return;
+    }
+
+
+    showResult(
+      result
+    );
+
+
+    refreshDashboard();
+
+
+  } catch(e) {
+
+    document
+      .getElementById(
+        'checkStatus'
+      )
+      .textContent =
+        e.message;
+
 
     processing = false;
-
-    setTimeout(
-      () => {
-        setStatus(
-          'กรุณามองที่กล้อง'
-        );
-      },
-      2200
-    );
-
-    return;
-
   }
+}
+
+
+function showResult(r) {
 
   document
     .getElementById(
       'resultTitle'
     )
     .textContent =
-
-      res.duplicate
+      r.duplicate
       ? 'วันนี้คุณเช็กชื่อแล้ว'
       : 'เช็กชื่อสำเร็จ 🎉';
 
@@ -934,13 +1684,11 @@ function handleResult(res) {
       'resultName'
     )
     .textContent =
-
-      res.firstName +
-
+      r.firstName +
       (
-        res.nickname
+        r.nickname
         ? ' (' +
-          res.nickname +
+          r.nickname +
           ')'
         : ''
       );
@@ -951,8 +1699,7 @@ function handleResult(res) {
       'resultCount'
     )
     .textContent =
-
-      res.attendanceCount +
+      r.attendanceCount +
       ' ครั้ง';
 
 
@@ -961,9 +1708,8 @@ function handleResult(res) {
       'resultRank'
     )
     .textContent =
-
-      'อันดับ ' +
-      res.rank;
+      '🏆 อันดับ ' +
+      r.rank;
 
 
   document
@@ -971,9 +1717,8 @@ function handleResult(res) {
       'resultTime'
     )
     .textContent =
-
       'เวลา ' +
-      res.checkInTime +
+      r.checkInTime +
       ' น.';
 
 
@@ -981,71 +1726,362 @@ function handleResult(res) {
     .getElementById(
       'result'
     )
-    .classList
-    .add('show');
+    .classList.add(
+      'show'
+    );
 
 
   setTimeout(
-    () => {
+    ()=>{
 
       document
         .getElementById(
           'result'
         )
-        .classList
-        .remove('show');
+        .classList.remove(
+          'show'
+        );
 
-      processing = false;
 
-      setStatus(
-        'พร้อมสำหรับคนถัดไป'
-      );
+      processing=false;
+
+
+      document
+        .getElementById(
+          'checkStatus'
+        )
+        .textContent =
+          'พร้อมสำหรับคนถัดไป';
 
     },
     4000
   );
-
 }
 
 
-// ==============================================
-// UTIL
-// ==============================================
+// =====================================================
+// DASHBOARD
+// =====================================================
 
-function setStatus(text) {
+async function refreshDashboard() {
 
-  document
-    .getElementById(
-      'status'
+  try {
+
+    const d =
+      await backend(
+        'DASHBOARD'
+      );
+
+
+    text(
+      'total',
+      d.totalParticipants
+    );
+
+
+    text(
+      'today',
+      d.checkedToday
+    );
+
+
+    text(
+      'notYet',
+      d.notCheckedToday
+    );
+
+
+    text(
+      'villages',
+      d.villages
+    );
+
+
+    renderRank(
+      'dashboardRanking',
+      d.leaderboard
+    );
+
+
+  } catch(e) {
+
+    showToast(
+      e.message
+    );
+  }
+}
+
+
+// =====================================================
+// RANKING
+// =====================================================
+
+async function loadRanking() {
+
+  try {
+
+    const r =
+      await backend(
+        'LEADERBOARD',
+        {
+          limit:100
+        }
+      );
+
+
+    renderRank(
+      'ranking100',
+      r.data
+    );
+
+
+  } catch(e) {
+
+    showToast(
+      e.message
+    );
+  }
+}
+
+
+function renderRank(
+  id,
+  list
+) {
+
+  const box =
+    document.getElementById(id);
+
+
+  if (
+    !list ||
+    !list.length
+  ) {
+
+    box.innerHTML =
+      '<p>ยังไม่มีข้อมูล</p>';
+
+    return;
+  }
+
+
+  box.innerHTML =
+    list.map(
+      x=>{
+
+        let medal='';
+
+
+        if(x.rank===1){
+          medal='🥇';
+        }
+
+        if(x.rank===2){
+          medal='🥈';
+        }
+
+        if(x.rank===3){
+          medal='🥉';
+        }
+
+
+        return `
+
+          <div class="rank-row">
+
+            <div class="rank-no">
+              ${medal || '#'+x.rank}
+            </div>
+
+            <div>
+              <strong>
+                ${escapeHtml(x.firstName)}
+                ${
+                  x.nickname
+                  ? '('+
+                    escapeHtml(x.nickname)+
+                    ')'
+                  : ''
+                }
+              </strong>
+
+              <br>
+
+              <small>
+                ${escapeHtml(x.village || '')}
+              </small>
+            </div>
+
+            <div style="
+              text-align:right;
+              font-weight:bold;
+              color:#ed0a68
+            ">
+              ${x.attendanceCount} ครั้ง
+            </div>
+
+          </div>
+
+        `;
+      }
     )
-    .textContent =
-      text;
-
+    .join('');
 }
 
 
-function debug(text) {
+// =====================================================
+// REWARDS
+// =====================================================
 
-  document
-    .getElementById(
-      'debug'
-    )
-    .textContent =
-      String(text);
+async function loadRewards() {
 
-}
+  try {
+
+    const r =
+      await backend(
+        'REWARDS'
+      );
 
 
-function sleep(ms) {
+    const box =
+      document.getElementById(
+        'rewardGrid'
+      );
 
-  return new Promise(
-    resolve =>
-      setTimeout(
-        resolve,
-        ms
+
+    if (
+      !r.data ||
+      !r.data.length
+    ) {
+
+      box.innerHTML =
+        '<div class="card">ยังไม่ได้กำหนดรางวัล</div>';
+
+      return;
+    }
+
+
+    box.innerHTML =
+      r.data.map(
+        x=>`
+
+          <div class="reward">
+
+            ${
+              x.image
+              ? `<img src="${x.image}">`
+              : `
+                <div style="
+                  height:180px;
+                  display:flex;
+                  align-items:center;
+                  justify-content:center;
+                  font-size:60px
+                ">
+                  🎁
+                </div>
+              `
+            }
+
+            <div class="body">
+
+              <strong>
+                ${escapeHtml(x.rewardName)}
+              </strong>
+
+              <p>
+                ${escapeHtml(x.description || '')}
+              </p>
+
+              <small>
+                อันดับ
+                ${x.rankFrom}
+                -
+                ${x.rankTo}
+              </small>
+
+            </div>
+
+          </div>
+
+        `
       )
+      .join('');
+
+
+  } catch(e) {
+
+    showToast(
+      e.message
+    );
+  }
+}
+
+
+// =====================================================
+// UTILS
+// =====================================================
+
+function value(id) {
+
+  const el =
+    document.getElementById(id);
+
+
+  return el
+    ? el.value.trim()
+    : '';
+}
+
+
+function text(
+  id,
+  value
+) {
+
+  document
+    .getElementById(id)
+    .textContent =
+      value;
+}
+
+
+function showToast(msg) {
+
+  const t =
+    document.getElementById(
+      'toast'
+    );
+
+
+  t.textContent =
+    msg;
+
+
+  t.classList.add(
+    'show'
   );
 
+
+  setTimeout(
+    ()=>{
+      t.classList.remove(
+        'show'
+      );
+    },
+    3000
+  );
+}
+
+
+function escapeHtml(v) {
+
+  return String(v || '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
 }
 
 </script>
