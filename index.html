@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>Face Camera Kiosk</title>
+
+  <script
+    defer
+    src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js">
+  </script>
+
+  <style>
+    :root {
+      --pink:#ed0a68;
+      --purple:#76258c;
+      --green:#28b59f;
+      --orange:#ff8438;
+      --dark:#211622;
+    }
+
+    * {
+      box-sizing:border-box;
+    }
+
+    body {
+      margin:0;
+      min-height:100vh;
+
+      font-family:
+        Tahoma,
+        Arial,
+        sans-serif;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ffedf5,
+          #f8eafa
+        );
+
+      color:#333;
+    }
+
+    .app {
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .header {
+      padding:18px 24px;
+      color:white;
+
+      background:
+        linear-gradient(
+          90deg,
+          var(--pink),
+          var(--purple)
+        );
+
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+
+    .header h1 {
+      margin:0;
+      font-size:22px;
+    }
+
+    .header small {
+      opacity:.8;
+    }
+
+    .main {
+      width:min(1200px,96%);
+      margin:24px auto;
+      display:grid;
+
+      grid-template-columns:
+        1.35fr .65fr;
+
+      gap:22px;
+    }
+
+    .camera-card {
+      background:var(--dark);
+      border-radius:30px;
+      overflow:hidden;
+      min-height:650px;
+      position:relative;
+
+      box-shadow:
+        0 20px 60px
+        rgba(101,28,73,.18);
+    }
+
+    .video-wrap {
+      height:650px;
+      position:relative;
+    }
+
+    video {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+
+      transform:scaleX(-1);
+    }
+
+    .face-guide {
+      position:absolute;
+
+      width:290px;
+      height:365px;
+
+      border:
+        4px solid
+        rgba(255,255,255,.95);
+
+      border-radius:48%;
+
+      left:50%;
+      top:47%;
+
+      transform:
+        translate(-50%,-50%);
+
+      box-shadow:
+        0 0 0 9999px
+        rgba(0,0,0,.18);
+
+      pointer-events:none;
+    }
+
+    .status {
+      position:absolute;
+
+      bottom:25px;
+      left:50%;
+
+      transform:
+        translateX(-50%);
+
+      color:white;
+
+      background:
+        rgba(0,0,0,.65);
+
+      padding:
+        12px 22px;
+
+      border-radius:30px;
+
+      text-align:center;
+
+      min-width:270px;
+    }
+
+    .side {
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .card {
+      background:white;
+      border-radius:25px;
+      padding:22px;
+
+      box-shadow:
+        0 15px 45px
+        rgba(130,25,80,.10);
+    }
+
+    .card h2,
+    .card h3 {
+      margin-top:0;
+    }
+
+    button {
+      border:0;
+      padding:13px 18px;
+      border-radius:15px;
+
+      font-size:16px;
+      font-weight:bold;
+
+      cursor:pointer;
+    }
+
+    .primary {
+      color:white;
+
+      background:
+        linear-gradient(
+          90deg,
+          var(--pink),
+          var(--purple)
+        );
+    }
+
+    .secondary {
+      color:var(--pink);
+      background:#ffe6f0;
+    }
+
+    .result {
+      display:none;
+
+      position:fixed;
+      inset:0;
+
+      background:
+        rgba(37,13,32,.78);
+
+      z-index:100;
+
+      align-items:center;
+      justify-content:center;
+
+      padding:20px;
+    }
+
+    .result.show {
+      display:flex;
+    }
+
+    .result-box {
+      width:min(540px,95vw);
+
+      background:white;
+      border-radius:34px;
+
+      padding:38px;
+
+      text-align:center;
+
+      box-shadow:
+        0 30px 100px
+        rgba(0,0,0,.3);
+    }
+
+    .check {
+      width:84px;
+      height:84px;
+
+      margin:
+        0 auto 20px;
+
+      background:var(--green);
+
+      color:white;
+
+      border-radius:50%;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      font-size:42px;
+    }
+
+    .person-name {
+      font-size:30px;
+      font-weight:bold;
+      margin:10px 0;
+    }
+
+    .big {
+      color:var(--pink);
+
+      font-size:45px;
+      font-weight:900;
+    }
+
+    .debug {
+      font-family:monospace;
+      font-size:12px;
+
+      background:#f6f3f5;
+
+      padding:12px;
+      border-radius:12px;
+
+      word-break:break-all;
+    }
+
+    @media(max-width:850px) {
+      .main {
+        grid-template-columns:1fr;
+      }
+
+      .camera-card,
+      .video-wrap {
+        min-height:520px;
+        height:520px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <header class="header">
+
+    <div>
+      <h1>📷 จุดเช็กชื่อกิจกรรม</h1>
+      <small>
+        Face Check-in Kiosk
+      </small>
+    </div>
+
+    <div id="clock"></div>
+
+  </header>
+
+  <main class="main">
+
+    <div class="camera-card">
+
+      <div class="video-wrap">
+
+        <video
+          id="video"
+          autoplay
+          muted
+          playsinline>
+        </video>
+
+        <div class="face-guide"></div>
+
+        <div
+          class="status"
+          id="status">
+          กำลังเริ่มระบบ...
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="side">
+
+      <div class="card">
+
+        <h2>เช็กชื่อด้วยใบหน้า</h2>
+
+        <p>
+          กรุณายืนหน้ากล้องทีละ 1 คน
+          และมองตรงเข้าหากล้อง
+        </p>
+
+        <button
+          class="primary"
+          onclick="startCamera()">
+          เปิดกล้อง
+        </button>
+
+        <button
+          class="secondary"
+          onclick="stopCamera()">
+          ปิดกล้อง
+        </button>
+
+      </div>
+
+      <div class="card">
+
+        <h3>สถานะการเชื่อมต่อ</h3>
+
+        <p id="connectionStatus">
+          กำลังตรวจสอบ...
+        </p>
+
+        <div
+          id="debug"
+          class="debug">
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<div
+  class="result"
+  id="result">
+
+  <div class="result-box">
+
+    <div class="check">
+      ✓
+    </div>
+
+    <h2 id="resultTitle">
+      เช็กชื่อสำเร็จ
+    </h2>
+
+    <div
+      class="person-name"
+      id="resultName">
+    </div>
+
+    <p>
+      เข้าร่วมกิจกรรมสะสม
+    </p>
+
+    <div
+      class="big"
+      id="resultCount">
+      0 ครั้ง
+    </div>
+
+    <p style="font-size:22px">
+      🏆
+      <strong id="resultRank"></strong>
+    </p>
+
+    <p id="resultTime"></p>
+
+  </div>
+
+</div>
+
+
+<script>
+
+const MODEL_URL =
+  'https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@master/weights';
+
+let stream = null;
+
+let scanning = false;
+
+let processing = false;
+
+let modelsReady = false;
+
+const video =
+  document.getElementById('video');
+
+
+// ==============================================
+// START
+// ==============================================
+
+window.addEventListener(
+  'load',
+  async () => {
+
+    startClock();
+
+    checkParent();
+
+    await loadModels();
+
+  }
+);
+
+
+// ==============================================
+// CLOCK
+// ==============================================
+
+function startClock() {
+
+  const render = () => {
+
+    document
+      .getElementById('clock')
+      .textContent =
+
+      new Intl.DateTimeFormat(
+        'th-TH',
+        {
+          dateStyle:'medium',
+          timeStyle:'medium'
+        }
+      )
+      .format(new Date());
+
+  };
+
+  render();
+
+  setInterval(
+    render,
+    1000
+  );
+
+}
+
+
+// ==============================================
+// CONNECTION
+// ==============================================
+
+function checkParent() {
+
+  const connected =
+    window.opener &&
+    !window.opener.closed;
+
+  document
+    .getElementById(
+      'connectionStatus'
+    )
+    .textContent =
+      connected
+      ? '✅ เชื่อมกับระบบหลักแล้ว'
+      : '⚠️ กรุณาเปิดหน้านี้จากระบบหลัก';
+
+}
+
+
+// ==============================================
+// LOAD MODELS
+// ==============================================
+
+async function loadModels() {
+
+  const status =
+    document.getElementById('status');
+
+  try {
+
+    status.textContent =
+      'กำลังโหลด AI ตรวจจับใบหน้า...';
+
+    await faceapi.nets
+      .tinyFaceDetector
+      .loadFromUri(
+        MODEL_URL
+      );
+
+    await faceapi.nets
+      .faceLandmark68TinyNet
+      .loadFromUri(
+        MODEL_URL
+      );
+
+    await faceapi.nets
+      .faceRecognitionNet
+      .loadFromUri(
+        MODEL_URL
+      );
+
+    modelsReady = true;
+
+    status.textContent =
+      'ระบบ AI พร้อมแล้ว กดเปิดกล้อง';
+
+  } catch (err) {
+
+    console.error(err);
+
+    status.textContent =
+      'โหลด AI ไม่สำเร็จ';
+
+    debug(
+      err.message || err
+    );
+
+  }
+
+}
+
+
+// ==============================================
+// CAMERA
+// ==============================================
+
+async function startCamera() {
+
+  if (!modelsReady) {
+
+    alert(
+      'กรุณารอระบบ AI โหลดให้เสร็จก่อน'
+    );
+
+    return;
+
+  }
+
+  try {
+
+    if (
+      !navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia
+    ) {
+
+      throw new Error(
+        'Browser นี้ไม่รองรับกล้อง'
+      );
+
+    }
+
+    stopCamera();
+
+    document
+      .getElementById('status')
+      .textContent =
+        'กำลังขออนุญาตกล้อง...';
+
+    stream =
+      await navigator.mediaDevices
+      .getUserMedia({
+
+        video:{
+          facingMode:'user',
+
+          width:{
+            ideal:1280
+          },
+
+          height:{
+            ideal:720
+          }
+
+        },
+
+        audio:false
+
+      });
+
+    video.srcObject =
+      stream;
+
+    await video.play();
+
+    scanning = true;
+
+    document
+      .getElementById('status')
+      .textContent =
+        'พร้อมแล้ว กรุณามองที่กล้อง';
+
+    scanLoop();
+
+  } catch (err) {
+
+    console.error(err);
+
+    let msg =
+      'เปิดกล้องไม่สำเร็จ';
+
+    if (
+      err.name ===
+      'NotAllowedError'
+    ) {
+
+      msg =
+        'ไม่ได้รับอนุญาตให้ใช้กล้อง';
+
+    }
+
+    if (
+      err.name ===
+      'NotFoundError'
+    ) {
+
+      msg =
+        'ไม่พบกล้องในเครื่อง';
+
+    }
+
+    if (
+      err.name ===
+      'NotReadableError'
+    ) {
+
+      msg =
+        'กล้องอาจถูกโปรแกรมอื่นใช้งาน';
+
+    }
+
+    document
+      .getElementById('status')
+      .textContent =
+        msg;
+
+    debug(
+      err.name +
+      ': ' +
+      err.message
+    );
+
+  }
+
+}
+
+
+function stopCamera() {
+
+  scanning = false;
+
+  if (stream) {
+
+    stream
+      .getTracks()
+      .forEach(
+        track => track.stop()
+      );
+
+    stream = null;
+
+  }
+
+  video.srcObject = null;
+
+}
+
+
+// ==============================================
+// FACE LOOP
+// ==============================================
+
+async function scanLoop() {
+
+  while (scanning) {
+
+    await sleep(1300);
+
+    if (
+      processing ||
+      !scanning ||
+      video.readyState < 2
+    ) {
+
+      continue;
+
+    }
+
+    try {
+
+      const faces =
+        await faceapi
+          .detectAllFaces(
+
+            video,
+
+            new faceapi
+              .TinyFaceDetectorOptions({
+
+                inputSize:320,
+
+                scoreThreshold:.55
+
+              })
+
+          )
+          .withFaceLandmarks(true)
+          .withFaceDescriptors();
+
+      if (
+        faces.length === 0
+      ) {
+
+        setStatus(
+          'กรุณามองตรงเข้าหากล้อง'
+        );
+
+        continue;
+
+      }
+
+      if (
+        faces.length > 1
+      ) {
+
+        setStatus(
+          'กรุณาเข้ากล้องทีละ 1 คน'
+        );
+
+        continue;
+
+      }
+
+      processing = true;
+
+      setStatus(
+        'กำลังตรวจสอบใบหน้า...'
+      );
+
+      const descriptor =
+        Array.from(
+          faces[0].descriptor
+        );
+
+      sendCheckIn(
+        descriptor
+      );
+
+    } catch (err) {
+
+      console.error(err);
+
+      processing = false;
+
+      debug(
+        err.message || err
+      );
+
+    }
+
+  }
+
+}
+
+
+// ==============================================
+// SEND TO APPS SCRIPT WINDOW
+// ==============================================
+
+function sendCheckIn(
+  descriptor
+) {
+
+  if (
+    !window.opener ||
+    window.opener.closed
+  ) {
+
+    processing = false;
+
+    setStatus(
+      'ไม่พบหน้าระบบหลัก'
+    );
+
+    alert(
+      'กรุณาเปิดหน้ากล้องจาก Dashboard ของระบบ'
+    );
+
+    return;
+
+  }
+
+  window.opener.postMessage(
+    {
+      type:'FACE_CHECKIN',
+
+      descriptor:
+        descriptor,
+
+      deviceId:
+        'MACBOOK-KIOSK-01'
+    },
+
+    '*'
+  );
+
+}
+
+
+// ==============================================
+// RECEIVE RESULT
+// ==============================================
+
+window.addEventListener(
+  'message',
+  event => {
+
+    if (
+      !event.data ||
+      event.data.type !==
+      'CHECKIN_RESULT'
+    ) {
+
+      return;
+
+    }
+
+    handleResult(
+      event.data.result
+    );
+
+  }
+);
+
+
+function handleResult(res) {
+
+  if (
+    !res ||
+    !res.recognized
+  ) {
+
+    setStatus(
+      res?.message ||
+      'ไม่พบข้อมูล'
+    );
+
+    processing = false;
+
+    setTimeout(
+      () => {
+        setStatus(
+          'กรุณามองที่กล้อง'
+        );
+      },
+      2200
+    );
+
+    return;
+
+  }
+
+  document
+    .getElementById(
+      'resultTitle'
+    )
+    .textContent =
+
+      res.duplicate
+      ? 'วันนี้คุณเช็กชื่อแล้ว'
+      : 'เช็กชื่อสำเร็จ 🎉';
+
+
+  document
+    .getElementById(
+      'resultName'
+    )
+    .textContent =
+
+      res.firstName +
+
+      (
+        res.nickname
+        ? ' (' +
+          res.nickname +
+          ')'
+        : ''
+      );
+
+
+  document
+    .getElementById(
+      'resultCount'
+    )
+    .textContent =
+
+      res.attendanceCount +
+      ' ครั้ง';
+
+
+  document
+    .getElementById(
+      'resultRank'
+    )
+    .textContent =
+
+      'อันดับ ' +
+      res.rank;
+
+
+  document
+    .getElementById(
+      'resultTime'
+    )
+    .textContent =
+
+      'เวลา ' +
+      res.checkInTime +
+      ' น.';
+
+
+  document
+    .getElementById(
+      'result'
+    )
+    .classList
+    .add('show');
+
+
+  setTimeout(
+    () => {
+
+      document
+        .getElementById(
+          'result'
+        )
+        .classList
+        .remove('show');
+
+      processing = false;
+
+      setStatus(
+        'พร้อมสำหรับคนถัดไป'
+      );
+
+    },
+    4000
+  );
+
+}
+
+
+// ==============================================
+// UTIL
+// ==============================================
+
+function setStatus(text) {
+
+  document
+    .getElementById(
+      'status'
+    )
+    .textContent =
+      text;
+
+}
+
+
+function debug(text) {
+
+  document
+    .getElementById(
+      'debug'
+    )
+    .textContent =
+      String(text);
+
+}
+
+
+function sleep(ms) {
+
+  return new Promise(
+    resolve =>
+      setTimeout(
+        resolve,
+        ms
+      )
+  );
+
+}
+
+</script>
+
+</body>
+</html>
